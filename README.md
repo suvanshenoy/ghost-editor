@@ -1,1 +1,1 @@
-# GhostEdit
+# GhostEditor

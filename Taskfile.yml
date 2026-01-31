@@ -10,11 +10,11 @@ tasks:
 
   dev:
     cmds:
-      - mix run ./lib/ghost_edit.exs
+      - mix run ./lib/ghost_editor.exs
 
   prod:
     dotenv:
       - .env
     cmds:
-      - defer: ./_build/prod/rel/ghostedit/bin/ghostedit start
+      - defer: ./_build/prod/rel/ghosteditor/bin/ghosteditor start
       - mix release
