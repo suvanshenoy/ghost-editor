@@ -1,7 +1,7 @@
 defmodule GhostEditor do
   @behaviour Ratatouille.App
 
-  alias GhostEditor.UI.Screen
+  alias GhostEditor.Layout
 
   alias GhostEditor.Actions.Typing
 
@@ -9,7 +9,9 @@ defmodule GhostEditor do
   def init(%{window: window}) do
     model = %{
       window: window,
-      text: ""
+      text: "",
+      text_cursor: %{text_cursor_x: 0, text_cursor_y: 0},
+      cursor_position: 0
     }
 
     Typing.init(model)
@@ -22,13 +24,12 @@ defmodule GhostEditor do
 
   @impl true
   def render(model) do
-    Screen.render(model)
+    Layout.render(model)
   end
 end
 
 Ratatouille.run(GhostEditor,
   quit_events: [
-    {:key, Ratatouille.Constants.key(:ctrl_d)},
     {:key, Ratatouille.Constants.key(:ctrl_z)}
   ]
 )

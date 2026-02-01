@@ -17,4 +17,4 @@ tasks:
       - .env
     cmds:
       - defer: ./_build/prod/rel/ghosteditor/bin/ghosteditor start
-      - mix release
+      - MIX_ENV=$MIX_ENV mix release
