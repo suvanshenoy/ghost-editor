@@ -3,18 +3,21 @@ defmodule GhostEditor do
 
   alias GhostEditor.UI.Screen
 
+  alias GhostEditor.Actions.Typing
+
   @impl true
   def init(%{window: window}) do
     model = %{
-      window: window
+      window: window,
+      text: ""
     }
 
-    model
+    Typing.init(model)
   end
 
   @impl true
-  def update(model, mesg) do
-    Screen.update(model, mesg)
+  def update(model, message) do
+    Typing.update(model, message)
   end
 
   @impl true
@@ -23,4 +26,9 @@ defmodule GhostEditor do
   end
 end
 
-Ratatouille.run(GhostEditor)
+Ratatouille.run(GhostEditor,
+  quit_events: [
+    {:key, Ratatouille.Constants.key(:ctrl_d)},
+    {:key, Ratatouille.Constants.key(:ctrl_z)}
+  ]
+)
