@@ -1,57 +1,50 @@
 defmodule GhostEditor.Actions.Typing do
   use GhostEditor.Constants.Keys
 
+  alias GhostEditor.Actions.Typing.TypingEvents
+
   def init(model) do
     model
   end
 
   def update(model, message) do
-    %{text: text, text_cursor: %{text_cursor_x: x, text_cursor_y: y}, cursor_position: pos} =
+    %{
+      text: text,
+      text_cursor: %{text_cursor_x: x, text_cursor_y: y},
+      cursor_position: %{cursor_position_x: posX, cursor_position_y: posY}
+    } =
       model
 
     case message do
       {:event, %{key: key}} when key in @delete_keys ->
-        %{model | text: String.slice(text, 0, String.length(text) - 1)}
+        TypingEvents.delete_event(model, text, posX, posY)
 
       {:event, %{key: key}} when key in [@spacebar, @enter] ->
         case key do
-          @spacebar -> %{model | text: text <> " ", cursor_position: pos + 1}
-          @enter -> %{model | text: text <> "\n"}
+          @spacebar ->
+            TypingEvents.spacebar_event(model, text, posX, posY)
+
+          @enter ->
+            TypingEvents.enter_event(model, text, posX, posY)
         end
 
       {:event, %{key: key}} when key in @scroll_keys ->
         case key do
           @scroll_up ->
-            %{
-              model
-              | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-                cursor_position: y - 2
-            }
+            TypingEvents.scroll_up_event(model, x, y, posX, posY)
 
           @scroll_down ->
-            %{
-              model
-              | text_cursor: %{text_cursor_y: y + 2, text_cursor_x: x},
-                cursor_position: y + 2
-            }
+            TypingEvents.scroll_down_event(model, x, y, posX, posY)
 
           @scroll_left ->
-            %{
-              model
-              | text_cursor: %{text_cursor_y: y, text_cursor_x: x - 2},
-                cursor_position: x - 2
-            }
+            TypingEvents.scroll_left_event(model, x, y, posX, posY)
 
           @scroll_right ->
-            %{
-              model
-              | text_cursor: %{text_cursor_y: y, text_cursor_x: x + 2},
-                cursor_position: x + 2
-            }
+            TypingEvents.scroll_right_event(model, x, y, posX, posY)
         end
 
       {:event, %{ch: ch}} when ch > 0 ->
-        %{model | text: text <> <<ch::utf8>>}
+        TypingEvents.text_event(model, text, ch, posX, posY)
 
       _ ->
         model

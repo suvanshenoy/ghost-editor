@@ -4,17 +4,16 @@ tasks:
   setup:
     dotenv:
       - ./.env
-    cmds:
-      - defer: mix setup
-      - "nix develop --no-write-lock-file $FLAKE_URL --command $SHELL"
+    cmd: nix develop --no-write-lock-file $FLAKE_URL --command $SHELL
 
   dev:
     cmds:
+      - mix deps.get
       - mix run ./lib/ghost_editor.exs
 
-  prod:
-    dotenv:
-      - .env
-    cmds:
-      - defer: ./_build/prod/rel/ghosteditor/bin/ghosteditor start
-      - MIX_ENV=$MIX_ENV mix release
+  # prod:
+  #   dotenv:
+  #     - ./.env
+  #   cmds:
+  #     - defer: ./_build/prod/rel/ghosteditor/bin/ghosteditor start
+  #     - MIX_ENV=$MIX_ENV mix release
