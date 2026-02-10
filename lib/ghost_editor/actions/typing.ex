@@ -1,6 +1,5 @@
 defmodule GhostEditor.Actions.Typing do
   use GhostEditor.Constants.Keys
-
   alias GhostEditor.Actions.Typing.TypingEvents
 
   def init(model) do
@@ -25,11 +24,11 @@ defmodule GhostEditor.Actions.Typing do
             TypingEvents.spacebar_event(model, text, posX, posY)
 
           @enter ->
-            TypingEvents.enter_event(model, text, posX, posY)
+            TypingEvents.enter_event(model, text, 0, posY)
         end
 
-      {:event, %{key: key}} when key in @scroll_keys ->
-        case key do
+      {:event, %{ch: ch}} when ch in @scroll_keys ->
+        case ch do
           @scroll_up ->
             TypingEvents.scroll_up_event(model, x, y, posX, posY)
 
@@ -42,6 +41,21 @@ defmodule GhostEditor.Actions.Typing do
           @scroll_right ->
             TypingEvents.scroll_right_event(model, x, y, posX, posY)
         end
+
+      # {:event, %{ch: ch}} when ch in @motion_keys ->
+      #   case ch do
+      #     @move_up ->
+      #       TypingEvents.move_up_event(model, x, y, posX, posY)
+
+      #     @move_down ->
+      #       TypingEvents.move_down_event(model, x, y, posX, posY)
+
+      #     @move_left ->
+      #       TypingEvents.move_left_event(model, x, y, posX, posY)
+
+      #     @move_right ->
+      #       TypingEvents.move_right_event(model, x, y, posX, posY)
+      #   end
 
       {:event, %{ch: ch}} when ch > 0 ->
         TypingEvents.text_event(model, text, ch, posX, posY)

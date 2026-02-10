@@ -1,34 +1,37 @@
 defmodule GhostEditor.Layout do
   import Ratatouille.View
-
-  # alias GhostEditor.UI.ScrollBar
-
   use GhostEditor.Constants.Colors
+
+  alias GhostEditor.UI.CursorBar
+  alias GhostEditor.UI.Menu
+  alias GhostEditor.UI.Screen
 
   def render(model) do
     %{
       text: text,
       text_cursor: %{text_cursor_x: x, text_cursor_y: y},
-      cursor_position: %{cursor_position_x: posX, cursor_position_y: posY}
+      displays: displays
     } =
       model
 
-    cursor_bar =
-      bar do
-        label(
-          content: "(curX: #{posX}%, curY: #{posY}%)",
-          color: @default_text_color,
-          attributes: [:bold]
+    case displays do
+      _ ->
+        Screen.render(
+          %{
+            model
+            | displays: %{screen: %{size: 10}}
+          },
+          Menu.render(%{model | displays: %{menu: %{size: 2}}})
         )
-      end
 
-    view(bottom_bar: cursor_bar) do
-      panel(height: :fill, border: %{color: @default_border_color}) do
-        viewport(offset_y: y, offset_x: x) do
-          # ScrollBar.render(model)
-          label(content: text <> "| ", attributes: [:bold], color: @default_text_color)
-        end
-      end
+        # _ ->
+        #   view(bottom_bar: CursorBar.render(model)) do
+        #     panel(height: :fill, border: %{color: @default_border_color}, padding: 0) do
+        #       viewport(offset_y: y, offset_x: x) do
+        #         label(content: text <> "| ", attributes: [:bold], color: @default_text_color)
+        #       end
+        #     end
+        #   end
     end
   end
 end
