@@ -1,10 +1,13 @@
 defmodule GhostEditor do
   @behaviour Ratatouille.App
 
+  import Ratatouille.Constants, only: [key: 1]
+
   alias GhostEditor.Layout
-  alias GhostEditor.Actions.Typing
-  alias GhostEditor.Actions.Traverse.MenuTraverse
-  alias GhostEditor.Actions.Display
+  # alias GhostEditor.Actions.Traverse.MenuTraverse
+  alias GhostEditor.KeyNotifer
+  # alias GhostEditor.Actions.Display
+  # alias GhostEditor.Actions.Typing
 
   @impl true
   def init(%{window: window}) do
@@ -15,20 +18,23 @@ defmodule GhostEditor do
       cursor_position: %{cursor_position_x: 0, cursor_position_y: 0},
       displays: %{
         screen: %{size: 0, show: 0},
-        menu: %{id: 0, size: 0, show: 0, traverse: %{up: 0, down: 0}}
-      }
+        menu: %{size: 0, show: 0, traverse: %{up: 0, down: 0}, files: []}
+      },
+      key: ""
     }
 
-    Display.init(model)
-    MenuTraverse.init(model)
-    Typing.init(model)
+    KeyNotifer.init(model)
+    # MenuTraverse.init(model)
+    # Display.init(model)
+    # Typing.init(model)
   end
 
   @impl true
   def update(model, message) do
-    Display.update(model, message)
-    MenuTraverse.update(model, message)
-    Typing.update(model, message)
+    # Display.update(model, message)
+    # MenuTraverse.update(model, message)
+    KeyNotifer.update(model, message)
+    # Typing.update(model, message)
   end
 
   @impl true

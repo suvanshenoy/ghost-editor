@@ -7,13 +7,14 @@ defmodule GhostEditor.UI.Screen do
     %{
       window: window,
       text: text,
-      displays: %{screen: %{size: size}}
+      displays: %{screen: %{size: size}},
+      key: key
     } =
       model
 
     height = window.height - 2
 
-    view(bottom_bar: CursorBar.render(model)) do
+    view(bottom_bar: CursorBar.render(%{model | key: key})) do
       overlay(padding: 0) do
         row do
           menu

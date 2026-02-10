@@ -6,11 +6,12 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverse do
   end
 
   def update(model, message) do
-    %{displays: %{menu: %{id: id}}} = model
-
     case message do
-      {:event, %{key: @ctrl_m}} ->
-        %{model | displays: %{menu: %{id: id, traverse: %{up: 1}}}}
+      {:event, %{ch: ?1}} ->
+        %{model | displays: %{menu: %{traverse: %{up: 1}}}}
+
+      {:event, %{ch: ?2}} ->
+        %{model | displays: %{menu: %{traverse: %{down: 1}}}}
     end
   end
 end
