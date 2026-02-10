@@ -16,21 +16,21 @@ defmodule GhostEditor do
       cursor_position: %{cursor_position_x: 0, cursor_position_y: 0},
       displays: %{
         screen: %{size: 0, show: 0},
-        menu: %{size: 0, show: 0, traverse: %{up: 0, down: 0}, files: []}
+        menu: %{size: 0, show: 0, traverse: %{up: 0}, files: []}
       },
       key: ""
     }
 
-    MenuTraverse.init(model)
     Display.init(model)
-    # KeyNotifer.init(model)
     # Typing.init(model)
+    MenuTraverse.init(model)
+    # KeyNotifer.init(model)
   end
 
   @impl true
   def update(model, message) do
-    # Typing.update(model, message)
     Display.update(model, message)
+    # Typing.update(model, message)
     MenuTraverse.update(model, message)
     # KeyNotifer.update(model, message)
   end

@@ -15,7 +15,13 @@ defmodule GhostEditor.Actions.Display do
 
           @ctrl_d ->
             DisplayEvents.display_screen_event(model)
+
+          _ ->
+            model
         end
+
+      _ ->
+        model
     end
   end
 end

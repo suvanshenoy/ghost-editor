@@ -14,7 +14,7 @@ defmodule GhostEditor.Layout do
     {_, files} = File.ls()
 
     case displays do
-      %{menu: %{traverse: %{up: 1}}} ->
+      %{menu: %{traverse: %{up: up}}} ->
         Screen.render(
           %{
             model
@@ -22,19 +22,7 @@ defmodule GhostEditor.Layout do
           },
           FileMenu.render(%{
             model
-            | displays: %{menu: %{size: 2, files: files, traverse: %{up: 1}}}
-          })
-        )
-
-      %{menu: %{traverse: %{down: 1}}} ->
-        Screen.render(
-          %{
-            model
-            | displays: %{screen: %{size: 10}}
-          },
-          FileMenu.render(%{
-            model
-            | displays: %{menu: %{size: 2, files: files, traverse: %{down: 1}}}
+            | displays: %{menu: %{size: 2, files: files, traverse: %{up: up}}}
           })
         )
 

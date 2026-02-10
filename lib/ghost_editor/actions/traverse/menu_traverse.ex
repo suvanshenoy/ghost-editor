@@ -6,12 +6,16 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverse do
   end
 
   def update(model, message) do
-    case message do
-      {:event, %{ch: ?1}} ->
-        %{model | displays: %{menu: %{traverse: %{up: 1}}}}
+    %{displays: displays} = model
 
-      {:event, %{ch: ?2}} ->
-        %{model | displays: %{menu: %{traverse: %{down: 1}}}}
+    case message do
+      {:event, %{ch: @move_down}} ->
+        up = displays.menu.traverse.up - 1
+        %{model | displays: %{menu: %{traverse: %{up: up}}}}
+
+      {:event, %{ch: @move_up}} ->
+        up = displays.menu.traverse.up + 1
+        %{model | displays: %{menu: %{traverse: %{up: up}}}}
 
       _ ->
         model
