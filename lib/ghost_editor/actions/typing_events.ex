@@ -89,35 +89,35 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     }
   end
 
-  def move_up_event(model, x, y, posX, posY) do
-    # %{
-    #   model
-    #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-    #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-    # }
-  end
+  # def move_up_event(model, x, y, posX, posY) do
+  # %{
+  #   model
+  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
+  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
+  # }
+  # end
 
-  def move_down_event(model, x, y, posX, posY) do
-    # %{
-    #   model
-    #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-    #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-    # }
-  end
+  # def move_down_event(model, x, y, posX, posY) do
+  # %{
+  #   model
+  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
+  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
+  # }
+  # end
 
-  def move_left_event(model, x, y, posX, posY) do
-    # %{
-    #   model
-    #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-    #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-    # }
-  end
+  # def move_left_event(model, x, y, posX, posY) do
+  # %{
+  #   model
+  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
+  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
+  # }
+  # end
 
-  def move_right_event(model, x, y, posX, posY) do
-    # %{
-    #   model
-    #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-    #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-    # }
-  end
+  # def move_right_event(model, x, y, posX, posY) do
+  # %{
+  #   model
+  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
+  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
+  # }
+  # end
 end

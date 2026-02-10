@@ -3,6 +3,7 @@ defmodule GhostEditor do
 
   alias GhostEditor.Layout
   alias GhostEditor.Actions.Typing
+  alias GhostEditor.Actions.Traverse.MenuTraverse
   alias GhostEditor.Actions.Display
 
   @impl true
@@ -12,17 +13,22 @@ defmodule GhostEditor do
       text: "",
       text_cursor: %{text_cursor_x: 0, text_cursor_y: 0},
       cursor_position: %{cursor_position_x: 0, cursor_position_y: 0},
-      displays: %{screen: %{size: 0, show: 0}, menu: %{size: 0, show: 0}}
+      displays: %{
+        screen: %{size: 0, show: 0},
+        menu: %{id: 0, size: 0, show: 0, traverse: %{up: 0, down: 0}}
+      }
     }
 
-    Typing.init(model)
     Display.init(model)
+    MenuTraverse.init(model)
+    Typing.init(model)
   end
 
   @impl true
   def update(model, message) do
-    Typing.update(model, message)
     Display.update(model, message)
+    MenuTraverse.update(model, message)
+    Typing.update(model, message)
   end
 
   @impl true

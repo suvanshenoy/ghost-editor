@@ -6,19 +6,22 @@ defmodule GhostEditor.UI.Screen do
   def render(model, menu) do
     %{
       window: window,
+      text: text,
       displays: %{screen: %{size: size}}
     } =
       model
 
-    height = window.height - 3
+    height = window.height - 2
 
     view(bottom_bar: CursorBar.render(model)) do
-      panel(height: :fill, border: %{color: @default_border_color}, padding: 0) do
+      overlay(padding: 0) do
         row do
           menu
 
           column(size: size) do
-            panel(height: height)
+            panel(height: height, border: %{color: @default_border_color}) do
+              label(content: text <> "| ", attributes: [:bold], color: @default_text_color)
+            end
           end
         end
       end

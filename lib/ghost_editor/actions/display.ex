@@ -1,6 +1,6 @@
 defmodule GhostEditor.Actions.Display do
   use GhostEditor.Constants.Keys
-  alias GhostEditor.Actions.Display.DisplayEvents
+  # alias GhostEditor.Actions.Display.DisplayEvents
 
   def init(model) do
     model
