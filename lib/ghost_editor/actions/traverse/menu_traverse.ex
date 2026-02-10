@@ -12,6 +12,9 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverse do
 
       {:event, %{ch: ?2}} ->
         %{model | displays: %{menu: %{traverse: %{down: 1}}}}
+
+      _ ->
+        model
     end
   end
 end

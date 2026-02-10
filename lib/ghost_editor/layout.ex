@@ -6,6 +6,7 @@ defmodule GhostEditor.Layout do
 
   def render(model) do
     %{
+      window: window,
       displays: displays
     } =
       model
@@ -13,29 +14,55 @@ defmodule GhostEditor.Layout do
     {_, files} = File.ls()
 
     case displays do
-      # %{menu: %{traverse: %{up: 1}}} ->
-      #   Screen.render(
-      #     %{
-      #       model
-      #       | displays: %{screen: %{size: 10}}
-      #     },
-      #     FileMenu.render(%{
-      #       model
-      #       | displays: %{menu: %{size: 2, files: files, menu: %{traverse: %{up: 1}}}}
-      #     })
-      #   )
+      %{menu: %{traverse: %{up: 1}}} ->
+        Screen.render(
+          %{
+            model
+            | displays: %{screen: %{size: 10}}
+          },
+          FileMenu.render(%{
+            model
+            | displays: %{menu: %{size: 2, files: files, traverse: %{up: 1}}}
+          })
+        )
 
-      # %{menu: %{traverse: %{down: 1}}} ->
-      #   Screen.render(
-      #     %{
-      #       model
-      #       | displays: %{screen: %{size: 10}}
-      #     },
-      #     FileMenu.render(%{
-      #       model
-      #       | displays: %{menu: %{size: 2, files: files, menu: %{traverse: %{down: 1}}}}
-      #     })
-      #   )
+      %{menu: %{traverse: %{down: 1}}} ->
+        Screen.render(
+          %{
+            model
+            | displays: %{screen: %{size: 10}}
+          },
+          FileMenu.render(%{
+            model
+            | displays: %{menu: %{size: 2, files: files, traverse: %{down: 1}}}
+          })
+        )
+
+      %{screen: %{show: 1}, menu: %{show: 0}} ->
+        {screen_size, _} = Integer.parse("#{window.height / 2 - 14}")
+
+        Screen.render(
+          %{
+            model
+            | displays: %{screen: %{size: screen_size}}
+          },
+          FileMenu.render(%{
+            model
+            | displays: %{menu: %{show: 0}}
+          })
+        )
+
+      %{screen: %{show: 0}, menu: %{size: 2, show: 1}} ->
+        Screen.render(
+          %{
+            model
+            | displays: %{screen: %{size: 10}}
+          },
+          FileMenu.render(%{
+            model
+            | displays: %{menu: %{size: 2, show: 1}}
+          })
+        )
 
       _ ->
         Screen.render(

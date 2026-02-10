@@ -1,13 +1,11 @@
 defmodule GhostEditor do
   @behaviour Ratatouille.App
 
-  import Ratatouille.Constants, only: [key: 1]
-
   alias GhostEditor.Layout
-  # alias GhostEditor.Actions.Traverse.MenuTraverse
+  alias GhostEditor.Actions.Traverse.MenuTraverse
   alias GhostEditor.KeyNotifer
-  # alias GhostEditor.Actions.Display
-  # alias GhostEditor.Actions.Typing
+  alias GhostEditor.Actions.Display
+  alias GhostEditor.Actions.Typing
 
   @impl true
   def init(%{window: window}) do
@@ -23,18 +21,18 @@ defmodule GhostEditor do
       key: ""
     }
 
-    KeyNotifer.init(model)
-    # MenuTraverse.init(model)
-    # Display.init(model)
+    MenuTraverse.init(model)
+    Display.init(model)
+    # KeyNotifer.init(model)
     # Typing.init(model)
   end
 
   @impl true
   def update(model, message) do
-    # Display.update(model, message)
-    # MenuTraverse.update(model, message)
-    KeyNotifer.update(model, message)
     # Typing.update(model, message)
+    Display.update(model, message)
+    MenuTraverse.update(model, message)
+    # KeyNotifer.update(model, message)
   end
 
   @impl true

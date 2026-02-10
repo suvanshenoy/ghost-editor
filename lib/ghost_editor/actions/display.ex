@@ -1,28 +1,21 @@
 defmodule GhostEditor.Actions.Display do
   use GhostEditor.Constants.Keys
-  # alias GhostEditor.Actions.Display.DisplayEvents
+  alias GhostEditor.Actions.Display.DisplayEvents
 
   def init(model) do
     model
   end
 
   def update(model, message) do
-    %{
-      # text: text
-      # text_cursor: %{text_cursor_x: x, text_cursor_y: y},
-      # cursor_position: %{cursor_position_x: posX, cursor_position_y: posY}
-      # displays: %{screen: screen, menu: menu}
-    } =
-      model
-
     case message do
       {:event, %{key: key}} ->
         case key do
-          _ -> model
-        end
+          @ctrl_m ->
+            DisplayEvents.display_menu_event(model)
 
-      _ ->
-        model
+          @ctrl_d ->
+            DisplayEvents.display_screen_event(model)
+        end
     end
   end
 end
