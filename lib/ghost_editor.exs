@@ -45,9 +45,6 @@ defmodule GhostEditor do
         Display.update(model, message)
         Typing.update(model, message)
     end
-
-    # Typing.update(model, message)
-    # IO.inspect(model)
   end
 
   @impl true

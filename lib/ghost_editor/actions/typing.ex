@@ -16,30 +16,69 @@ defmodule GhostEditor.Actions.Typing do
 
     case message do
       {:event, %{key: key}} when key in @delete_keys ->
-        TypingEvents.delete_event(model, text, posX, posY)
+        TypingEvents.event(:delete, %{
+          model: model,
+          text: text,
+          cursor_position_x: posX,
+          cursor_position_y: posY
+        })
 
       {:event, %{key: key}} when key in [@spacebar, @enter] ->
         case key do
           @spacebar ->
-            TypingEvents.spacebar_event(model, text, posX, posY)
+            TypingEvents.event(:spacebar, %{
+              model: model,
+              text: text,
+              cursor_position_x: posX,
+              cursor_position_y: posY
+            })
 
           @enter ->
-            TypingEvents.enter_event(model, text, 0, posY)
+            TypingEvents.event(:enter, %{
+              model: model,
+              text: text,
+              cursor_position_x: posX,
+              cursor_position_y: posY
+            })
         end
 
       {:event, %{ch: ch}} when ch in @scroll_keys ->
         case ch do
           @scroll_up ->
-            TypingEvents.scroll_up_event(model, x, y, posX, posY)
+            TypingEvents.event(:scroll_up, %{
+              model: model,
+              text_cursor_x: x,
+              text_cursor_y: y,
+              cursor_position_x: posX,
+              cursor_position_y: posY
+            })
 
           @scroll_down ->
-            TypingEvents.scroll_down_event(model, x, y, posX, posY)
+            TypingEvents.event(:scroll_down, %{
+              model: model,
+              text_cursor_x: x,
+              text_cursor_y: y,
+              cursor_position_x: posX,
+              cursor_position_y: posY
+            })
 
           @scroll_left ->
-            TypingEvents.scroll_left_event(model, x, y, posX, posY)
+            TypingEvents.event(:scroll_left, %{
+              model: model,
+              text_cursor_x: x,
+              text_cursor_y: y,
+              cursor_position_x: posX,
+              cursor_position_y: posY
+            })
 
           @scroll_right ->
-            TypingEvents.scroll_right_event(model, x, y, posX, posY)
+            TypingEvents.event(:scroll_right, %{
+              model: model,
+              text_cursor_x: x,
+              text_cursor_y: y,
+              cursor_position_x: posX,
+              cursor_position_y: posY
+            })
         end
 
       # {:event, %{ch: ch}} when ch in @motion_keys ->
@@ -58,7 +97,13 @@ defmodule GhostEditor.Actions.Typing do
       #   end
 
       {:event, %{ch: ch}} when ch > 0 ->
-        TypingEvents.text_event(model, text, ch, posX, posY)
+        TypingEvents.event(:text, %{
+          model: model,
+          text: text,
+          ch: ch,
+          cursor_position_x: posX,
+          cursor_position_y: posY
+        })
 
       _ ->
         model

@@ -12,10 +12,10 @@ defmodule GhostEditor.Actions.Switch do
       {:event, %{key: key}} ->
         case key do
           @ctrl_w ->
-            SwitchEvents.switch_to_menu_event(model)
+            SwitchEvents.event(:focus_menu, model)
 
           @ctrl_e ->
-            SwitchEvents.switch_to_screen_event(model)
+            SwitchEvents.event(:focus_screen, model)
 
           _ ->
             model

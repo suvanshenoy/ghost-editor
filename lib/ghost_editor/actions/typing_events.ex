@@ -1,5 +1,5 @@
 defmodule GhostEditor.Actions.Typing.TypingEvents do
-  def delete_event(model, text, posX, posY) do
+  def event(:delete, %{model: model, text: text, cursor_position_x: posX, cursor_position_y: posY}) do
     if(posX < 1 && String.length(text) - 1 == -1) do
       %{
         model
@@ -15,7 +15,12 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     end
   end
 
-  def spacebar_event(model, text, posX, posY) do
+  def event(:spacebar, %{
+        model: model,
+        text: text,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     %{window: window} = model
 
     if(posX == window.width - 5) do
@@ -29,7 +34,7 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     end
   end
 
-  def enter_event(model, text, posX, posY) do
+  def event(:enter, %{model: model, text: text, cursor_position_x: posX, cursor_position_y: posY}) do
     %{window: window} = model
 
     if(posY == window.height - 6) do
@@ -43,7 +48,13 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     end
   end
 
-  def text_event(model, text, ch, posX, posY) do
+  def event(:text, %{
+        model: model,
+        text: text,
+        ch: ch,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     %{window: window} = model
 
     if(posY == window.height - 5 || posX == window.width - 5) do
@@ -57,7 +68,13 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     end
   end
 
-  def scroll_up_event(model, x, y, posX, posY) do
+  def event(:scroll_up, %{
+        model: model,
+        text_cursor_x: x,
+        text_cursor_y: y,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     %{
       model
       | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
@@ -65,7 +82,13 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     }
   end
 
-  def scroll_down_event(model, x, y, posX, posY) do
+  def event(:scroll_down, %{
+        model: model,
+        text_cursor_x: x,
+        text_cursor_y: y,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     %{
       model
       | text_cursor: %{text_cursor_y: y + 2, text_cursor_x: x},
@@ -73,7 +96,13 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     }
   end
 
-  def scroll_left_event(model, x, y, posX, posY) do
+  def event(:scroll_left, %{
+        model: model,
+        text_cursor_x: x,
+        text_cursor_y: y,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     %{
       model
       | text_cursor: %{text_cursor_y: y, text_cursor_x: x - 2},
@@ -81,7 +110,13 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     }
   end
 
-  def scroll_right_event(model, x, y, posX, posY) do
+  def event(:scroll_right, %{
+        model: model,
+        text_cursor_x: x,
+        text_cursor_y: y,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     %{
       model
       | text_cursor: %{text_cursor_y: y, text_cursor_x: x + 2},
