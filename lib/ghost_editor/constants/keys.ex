@@ -10,9 +10,9 @@ defmodule GhostEditor.Constants.Keys do
       @escape key(:esc)
 
       @ctrl_d key(:ctrl_d)
-      @ctrl_s key(:ctrl_s)
       @ctrl_m key(:ctrl_m)
-      @ctrl_k key(:ctrl_k)
+      @ctrl_w key(:ctrl_w)
+      @ctrl_e key(:ctrl_e)
 
       @scroll_up ?w
       @scroll_down ?s

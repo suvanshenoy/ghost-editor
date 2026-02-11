@@ -43,14 +43,12 @@ defmodule GhostEditor.UI.FileMenu do
         column(size: displays.menu.size) do
           panel(height: height, border: %{color: @default_border_color}, padding: 0) do
             for file <- displays.menu.files do
-              panel(height: 3, padding: 0) do
-                label(
-                  content: "#{file}",
-                  attributes: [:bold],
-                  color: @default_text_color,
-                  wrap: true
-                )
-              end
+              label(
+                content: "#{file}",
+                attributes: [:bold],
+                color: @default_text_color,
+                wrap: true
+              )
             end
           end
         end
