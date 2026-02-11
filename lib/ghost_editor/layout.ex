@@ -18,7 +18,9 @@ defmodule GhostEditor.Layout do
         Screen.render(
           %{
             model
-            | displays: %{screen: %{size: 10}}
+            | displays: %{
+                screen: %{size: 10, focussed_file: displays.screen.focussed_file}
+              }
           },
           FileMenu.render(%{
             model
@@ -32,7 +34,9 @@ defmodule GhostEditor.Layout do
         Screen.render(
           %{
             model
-            | displays: %{screen: %{size: screen_size}}
+            | displays: %{
+                screen: %{size: screen_size, focussed_file: displays.screen.focussed_file}
+              }
           },
           FileMenu.render(%{
             model
@@ -44,7 +48,9 @@ defmodule GhostEditor.Layout do
         Screen.render(
           %{
             model
-            | displays: %{screen: %{size: 10}}
+            | displays: %{
+                screen: %{size: 10, focussed_file: displays.screen.focussed_file}
+              }
           },
           FileMenu.render(%{
             model
@@ -56,7 +62,9 @@ defmodule GhostEditor.Layout do
         Screen.render(
           %{
             model
-            | displays: %{screen: %{size: 10}}
+            | displays: %{
+                screen: %{size: 10, focussed_file: displays.screen.focussed_file}
+              }
           },
           FileMenu.render(%{
             model

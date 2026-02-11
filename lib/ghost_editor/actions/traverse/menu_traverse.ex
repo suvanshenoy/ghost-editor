@@ -11,11 +11,25 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverse do
     case message do
       {:event, %{ch: @move_down}} ->
         up = displays.menu.traverse.up - 1
-        %{model | displays: %{menu: %{traverse: %{up: up}}}}
+
+        %{
+          model
+          | displays: %{
+              menu: %{focus: displays.menu.focus, traverse: %{up: up}},
+              screen: displays.screen
+            }
+        }
 
       {:event, %{ch: @move_up}} ->
         up = displays.menu.traverse.up + 1
-        %{model | displays: %{menu: %{traverse: %{up: up}}}}
+
+        %{
+          model
+          | displays: %{
+              menu: %{focus: displays.menu.focus, traverse: %{up: up}},
+              screen: displays.screen
+            }
+        }
 
       _ ->
         model

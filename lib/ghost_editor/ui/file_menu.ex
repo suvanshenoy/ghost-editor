@@ -15,6 +15,8 @@ defmodule GhostEditor.UI.FileMenu do
       %{traverse: %{up: up}} ->
         {focussed_file, other_files} = List.pop_at(displays.menu.files, up)
 
+        %{model | displays: %{screen: %{focussed_file: focussed_file}}}
+
         column(size: displays.menu.size) do
           panel(height: height, border: %{color: @default_border_color}, padding: 0) do
             panel(height: 3, padding: 0) do

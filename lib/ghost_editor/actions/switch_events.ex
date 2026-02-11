@@ -1,11 +1,20 @@
 defmodule GhostEditor.Actions.Switch.SwitchEvents do
   use GhostEditor.Constants.Keys
 
-  def event(:focus_screen, model) do
-    %{model | displays: %{screen: %{focus: 1}}}
+  def event(:focus_screen, %{model: model}) do
+    %{displays: displays} = model
+    %{model | displays: %{screen: %{focus: 1, focussed_file: displays.screen.focussed_file}}}
   end
 
-  def event(:focus_menu, model) do
-    %{model | displays: %{menu: %{focus: 1, traverse: %{up: 1}}}}
+  def event(:focus_menu, %{model: model}) do
+    %{displays: displays} = model
+
+    %{
+      model
+      | displays: %{
+          menu: %{focus: 1, traverse: %{up: displays.menu.traverse.up}},
+          screen: displays.screen
+        }
+    }
   end
 end

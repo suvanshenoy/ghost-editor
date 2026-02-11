@@ -11,10 +11,10 @@ defmodule GhostEditor.Actions.Display do
       {:event, %{key: key}} ->
         case key do
           @ctrl_m ->
-            DisplayEvents.event(:display_menu, model)
+            DisplayEvents.event(:display_menu, %{model: model})
 
           @ctrl_d ->
-            DisplayEvents.event(:display_screen, model)
+            DisplayEvents.event(:display_screen, %{model: model})
 
           _ ->
             model
