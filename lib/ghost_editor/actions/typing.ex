@@ -1,6 +1,7 @@
 defmodule GhostEditor.Actions.Typing do
   use GhostEditor.Constants.Keys
   alias GhostEditor.Actions.Typing.TypingEvents
+  alias GhostEditor.Actions.Switch.SwitchEvents
 
   def init(model) do
     model
@@ -10,7 +11,8 @@ defmodule GhostEditor.Actions.Typing do
     %{
       text: text,
       text_cursor: %{text_cursor_x: x, text_cursor_y: y},
-      cursor_position: %{cursor_position_x: posX, cursor_position_y: posY}
+      cursor_position: %{cursor_position_x: posX, cursor_position_y: posY},
+      displays: displays
     } =
       model
 
@@ -42,7 +44,7 @@ defmodule GhostEditor.Actions.Typing do
             })
         end
 
-      {:event, %{ch: ch}} when ch in @scroll_keys ->
+      {:event, %{ch: ch}} when ch in @scroll_keys or ch > 0 ->
         case ch do
           @scroll_up ->
             TypingEvents.event(:scroll_up, %{
@@ -79,6 +81,15 @@ defmodule GhostEditor.Actions.Typing do
               cursor_position_x: posX,
               cursor_position_y: posY
             })
+
+          _ ->
+            TypingEvents.event(:text, %{
+              model: model,
+              text: text,
+              ch: ch,
+              cursor_position_x: posX,
+              cursor_position_y: posY
+            })
         end
 
       # {:event, %{ch: ch}} when ch in @motion_keys ->
@@ -96,14 +107,9 @@ defmodule GhostEditor.Actions.Typing do
       #       TypingEvents.move_right_event(model, x, y, posX, posY)
       #   end
 
-      {:event, %{ch: ch}} when ch > 0 ->
-        TypingEvents.event(:text, %{
-          model: model,
-          text: text,
-          ch: ch,
-          cursor_position_x: posX,
-          cursor_position_y: posY
-        })
+      {:event, %{key: @ctrl_w}} ->
+        %{model | displays: %{screen: displays.screen, menu: displays.menu}}
+        SwitchEvents.event(:focus_menu, %{model: model})
 
       _ ->
         model

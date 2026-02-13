@@ -51,6 +51,8 @@ defmodule GhostEditor.UI.FileMenu do
                 color: @default_text_color,
                 wrap: true
               )
+
+              %{model | displays: %{screen: %{focussed_file: file}}}
             end
           end
         end

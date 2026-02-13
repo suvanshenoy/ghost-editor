@@ -7,13 +7,22 @@ defmodule GhostEditor.UI.Screen do
     %{
       window: window,
       text: text,
-      displays: %{screen: %{size: size}}
+      displays: %{screen: %{size: size, focussed_file: focussed_file}}
     } =
       model
 
-    %{displays: displays} = model
-
     height = window.height - 2
+
+    focussed_file =
+      cond do
+        String.length(focussed_file) == 0 -> "Taskfile.yml"
+      end
+
+    data =
+      case File.read(focussed_file) do
+        {:ok, data} -> data
+        {:error, reason} -> raise reason
+      end
 
     view(bottom_bar: CursorBar.render(model)) do
       overlay(padding: 0) do
@@ -23,7 +32,7 @@ defmodule GhostEditor.UI.Screen do
           column(size: size) do
             panel(height: height, border: %{color: @default_border_color}) do
               label(
-                content: text <> "#{displays.screen.focussed_file}",
+                content: text <> "|" <> "#{data}",
                 attributes: [:bold],
                 color: @default_text_color
               )

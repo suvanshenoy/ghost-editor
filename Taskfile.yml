@@ -9,7 +9,7 @@ tasks:
   dev:
     cmds:
       - mix deps.get
-      - mix run ./lib/ghost_editor.exs
+      - mix run --no-halt
 
   # prod:
   #   dotenv:

@@ -1,17 +1,26 @@
 defmodule GhostEditor.Actions.Typing.TypingEvents do
   def event(:delete, %{model: model, text: text, cursor_position_x: posX, cursor_position_y: posY}) do
-    if(posX < 1 && String.length(text) - 1 == -1) do
-      %{
-        model
-        | text: text <> "",
-          cursor_position: %{cursor_position_y: posY, cursor_position_x: posX}
-      }
-    else
-      %{
-        model
-        | text: String.slice(text, 0, String.length(text) - 1),
-          cursor_position: %{cursor_position_y: posY, cursor_position_x: posX - 1}
-      }
+    cond do
+      posX < 1 && String.length(text) - 1 == -1 ->
+        %{
+          model
+          | text: text <> "",
+            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX}
+        }
+
+      posY == 0 && posX > 0 ->
+        %{
+          model
+          | text: String.slice(text, 0, String.length(text) - 1),
+            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX - 1}
+        }
+
+      posX == 0 && posY > 0 ->
+        %{
+          model
+          | text: String.slice(text, 0, String.length(text) - 1),
+            cursor_position: %{cursor_position_y: posY - 1, cursor_position_x: posX}
+        }
     end
   end
 
@@ -23,7 +32,7 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
       }) do
     %{window: window} = model
 
-    if(posX == window.width - 5) do
+    if(posX == window.width - 50) do
       %{model | text: text <> ""}
     else
       %{
@@ -37,7 +46,7 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
   def event(:enter, %{model: model, text: text, cursor_position_x: posX, cursor_position_y: posY}) do
     %{window: window} = model
 
-    if(posY == window.height - 6) do
+    if(posY == window.height - 25) do
       %{model | text: text <> ""}
     else
       %{

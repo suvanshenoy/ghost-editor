@@ -54,9 +54,3 @@ defmodule GhostEditor do
     Layout.render(model)
   end
 end
-
-Ratatouille.run(GhostEditor,
-  quit_events: [
-    {:key, Ratatouille.Constants.key(:ctrl_z)}
-  ]
-)
