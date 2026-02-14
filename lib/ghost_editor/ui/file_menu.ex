@@ -13,29 +13,66 @@ defmodule GhostEditor.UI.FileMenu do
 
     case displays.menu do
       %{traverse: %{up: up}} ->
-        {focussed_file, other_files} = List.pop_at(displays.menu.files, up)
+        cond do
+          up == 0 ->
+            {focussed_file, other_files} = List.pop_at(displays.menu.files, up)
 
-        %{model | displays: %{screen: %{focussed_file: focussed_file}}}
+            %{model | displays: %{screen: %{focussed_file: focussed_file}}}
 
-        column(size: displays.menu.size) do
-          panel(height: height, border: %{color: @default_border_color}, padding: 0) do
-            panel(height: 3, padding: 0) do
-              label(
-                content: "#{focussed_file}",
-                attributes: [:bold],
-                color: @default_text_color
-              )
+            column(size: displays.menu.size) do
+              panel(height: height, border: %{color: @default_border_color}, padding: 0) do
+                panel(height: 3, padding: 0) do
+                  label(
+                    content: "#{focussed_file}",
+                    attributes: [:bold],
+                    color: @default_text_color
+                  )
+                end
+
+                for file <- other_files do
+                  label(
+                    content: "#{file}",
+                    attributes: [:bold],
+                    color: @default_text_color,
+                    wrap: true
+                  )
+                end
+              end
             end
 
-            for file <- other_files do
-              label(
-                content: "#{file}",
-                attributes: [:bold],
-                color: @default_text_color,
-                wrap: true
+          true ->
+            {focussed_file, _} = List.pop_at(displays.menu.files, up)
+
+            menu_list = []
+
+            menu_list =
+              for file <- displays.menu.files do
+                menu_list ++
+                  [label(content: file, attributes: [:bold], color: @default_text_color)]
+              end
+
+            menu_list = List.delete_at(menu_list, up)
+
+            menu_list =
+              List.insert_at(
+                menu_list,
+                up,
+                panel(height: 3, padding: 0) do
+                  label(
+                    content: "#{focussed_file}",
+                    attributes: [:bold],
+                    color: @default_text_color
+                  )
+                end
               )
+
+            column(size: displays.menu.size) do
+              panel(height: height, border: %{color: @default_border_color}, padding: 0) do
+                for menu_item <- menu_list do
+                  menu_item
+                end
+              end
             end
-          end
         end
 
       %{show: 0} ->
