@@ -1,4 +1,29 @@
 defmodule GhostEditor.Actions.Typing.TypingEvents do
+  @spec event(
+          :delete
+          | :spacebar
+          | :enter
+          | :text
+          | :scroll_up
+          | :scroll_down
+          | :scroll_right
+          | :scroll_left,
+          %{
+            model: any(),
+            text: String.t(),
+            text_cursor_x: number(),
+            text_cursor_y: number(),
+            cursor_position_x: number(),
+            cursor_position_y: number()
+          }
+        ) :: %{
+          displays: %{
+            text: String.t(),
+            text_cursor: %{text_cursor_x: number(), text_cursor_y: number()},
+            cursor_position: %{cursor_position_x: number(), cursor_position_y: number()}
+          }
+        }
+
   def event(:delete, %{model: model, text: text, cursor_position_x: posX, cursor_position_y: posY}) do
     cond do
       posX < 1 && String.length(text) - 1 == -1 ->

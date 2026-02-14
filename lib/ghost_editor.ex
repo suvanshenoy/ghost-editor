@@ -16,8 +16,8 @@ defmodule GhostEditor do
       text_cursor: %{text_cursor_x: 0, text_cursor_y: 0},
       cursor_position: %{cursor_position_x: 0, cursor_position_y: 0},
       displays: %{
-        screen: %{size: 0, show: 0, focus: 0, focussed_file: ""},
-        menu: %{size: 0, show: 0, traverse: %{up: 0}, files: [], focus: 0}
+        screen: %{size: 0, show: 0, focus: 0},
+        menu: %{size: 0, show: 0, traverse: %{up: 0}, files: [], focus: 0, focussed_file: ""}
       },
       key: ""
     }

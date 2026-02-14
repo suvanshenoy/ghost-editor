@@ -6,6 +6,16 @@ defmodule GhostEditor.Actions.Display do
     model
   end
 
+  @spec update(
+          any(),
+          {:event,
+           %{
+             key:
+               Ratatouille.Constants.key(:ctrl_m)
+               | Ratatouille.Constants.key(:ctrl_d)
+           }}
+        ) :: any()
+
   def update(model, message) do
     case message do
       {:event, %{key: key}} ->

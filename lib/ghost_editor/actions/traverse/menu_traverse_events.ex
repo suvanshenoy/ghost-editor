@@ -1,11 +1,8 @@
-defmodule GhostEditor.Actions.Switch.SwitchEvents do
-  use GhostEditor.Constants.Keys
-
-  @spec event(:focus_screen | :focus_menu, %{model: any()}) :: %{
+defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
+  @spec event(:traverse_down | :traverse_up, %{model: any()}) :: %{
           displays: %{
-            screen: %{focus: 0 | 1},
             menu: %{
-              focus: 0 | 1,
+              focus: 1,
               traverse: %{up: number()},
               files: [String.t()],
               focussed_file: String.t()
@@ -13,15 +10,17 @@ defmodule GhostEditor.Actions.Switch.SwitchEvents do
           }
         }
 
-  def event(:focus_screen, %{model: model}) do
+  def event(:traverse_down, %{model: model}) do
     %{displays: displays} = model
+
+    up = displays.menu.traverse.up + 1
 
     %{
       model
       | displays: %{
-          screen: %{focus: 1},
           menu: %{
-            traverse: %{up: displays.menu.traverse.up},
+            focus: 1,
+            traverse: %{up: up},
             files: displays.menu.files,
             focussed_file: displays.menu.focussed_file
           }
@@ -29,16 +28,17 @@ defmodule GhostEditor.Actions.Switch.SwitchEvents do
     }
   end
 
-  def event(:focus_menu, %{model: model}) do
+  def event(:traverse_up, %{model: model}) do
     %{displays: displays} = model
+
+    up = displays.menu.traverse.up - 1
 
     %{
       model
       | displays: %{
-          screen: %{focus: 0},
           menu: %{
             focus: 1,
-            traverse: %{up: displays.menu.traverse.up},
+            traverse: %{up: up},
             files: displays.menu.files,
             focussed_file: displays.menu.focussed_file
           }

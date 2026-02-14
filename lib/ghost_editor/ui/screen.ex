@@ -3,19 +3,36 @@ defmodule GhostEditor.UI.Screen do
   use GhostEditor.Constants.Colors
   alias GhostEditor.UI.CursorBar
 
+  @spec render(
+          %{
+            window: any(),
+            text: String.t(),
+            displays: %{
+              screen: %{size: number()},
+              menu: %{
+                focussed_file: String.t()
+              }
+            }
+          },
+          any()
+        ) :: any()
+
   def render(model, menu) do
     %{
       window: window,
       text: text,
-      displays: %{screen: %{size: size, focussed_file: focussed_file}}
+      displays: %{screen: %{size: size}}
     } =
       model
 
     height = window.height - 2
 
+    focussed_file = ""
+
     focussed_file =
       cond do
-        String.length(focussed_file) == 0 -> "Taskfile.yml"
+        String.length(focussed_file) == 0 -> ".formatter.exs"
+        true -> focussed_file
       end
 
     data =

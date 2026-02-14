@@ -7,6 +7,20 @@ defmodule GhostEditor.Actions.Typing do
     model
   end
 
+  @spec update(
+          any(),
+          {:event,
+           %{
+             key:
+               Ratatouille.Constants.key(:backspace)
+               | Ratatouille.Constants.key(:backspace2)
+               | Ratatouille.Constants.key(:space)
+               | Ratatouille.Constants.key(:enter)
+               | Ratatouille.Constants.key(:ctrl_w),
+             ch: ?w | ?s | ?d | ?a | char()
+           }}
+        ) :: any()
+
   def update(model, message) do
     %{
       text: text,

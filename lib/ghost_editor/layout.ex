@@ -4,6 +4,19 @@ defmodule GhostEditor.Layout do
   alias GhostEditor.UI.FileMenu
   alias GhostEditor.UI.Screen
 
+  @spec render(any()) :: %{
+          displays: %{
+            screen: %{size: number()},
+            menu: %{
+              show: 0 | 1,
+              size: number(),
+              files: [String.t()],
+              traverse: %{up: number()},
+              focussed_file: String.t()
+            }
+          }
+        }
+
   def render(model) do
     %{
       window: window,
@@ -19,12 +32,18 @@ defmodule GhostEditor.Layout do
           %{
             model
             | displays: %{
-                screen: %{size: 10, focussed_file: displays.screen.focussed_file}
+                screen: %{size: 10}
               }
           },
           FileMenu.render(%{
             model
-            | displays: %{menu: %{size: 2, files: files, traverse: %{up: up}}}
+            | displays: %{
+                menu: %{
+                  size: 2,
+                  files: files,
+                  traverse: %{up: up}
+                }
+              }
           })
         )
 
@@ -35,7 +54,7 @@ defmodule GhostEditor.Layout do
           %{
             model
             | displays: %{
-                screen: %{size: screen_size, focussed_file: displays.screen.focussed_file}
+                screen: %{size: screen_size}
               }
           },
           FileMenu.render(%{
@@ -49,7 +68,7 @@ defmodule GhostEditor.Layout do
           %{
             model
             | displays: %{
-                screen: %{size: 10, focussed_file: displays.screen.focussed_file}
+                screen: %{size: 10}
               }
           },
           FileMenu.render(%{
@@ -63,7 +82,7 @@ defmodule GhostEditor.Layout do
           %{
             model
             | displays: %{
-                screen: %{size: 10, focussed_file: displays.screen.focussed_file}
+                screen: %{size: 10}
               }
           },
           FileMenu.render(%{
