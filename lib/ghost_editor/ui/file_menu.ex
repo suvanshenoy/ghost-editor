@@ -1,8 +1,7 @@
 defmodule GhostEditor.UI.FileMenu do
   import Ratatouille.View
   use GhostEditor.Constants.Colors
-  # alias GhostEditor.Actions.Traverse.MenuTraverseEvents
-  # alias GhostEditor.Actions.Switch.SwitchEvents
+  alias GhostEditor.AdjustSize
 
   @spec render(%{
           window: any(),
@@ -26,13 +25,15 @@ defmodule GhostEditor.UI.FileMenu do
 
     height = window.height - 2
 
+    size = AdjustSize.adjust(:menu, %{model: model})
+
     case displays.menu do
       %{traverse: %{up: up}} ->
         cond do
           up == 0 ->
             {focussed_file, other_files} = List.pop_at(displays.menu.files, up)
 
-            column(size: displays.menu.size) do
+            column(size: size) do
               panel(height: height, border: %{color: @default_border_color}, padding: 0) do
                 panel(height: 3, padding: 0) do
                   label(
@@ -78,7 +79,7 @@ defmodule GhostEditor.UI.FileMenu do
                 end
               )
 
-            column(size: displays.menu.size) do
+            column(size: size) do
               panel(height: height, border: %{color: @default_border_color}, padding: 0) do
                 for menu_item <- menu_list do
                   menu_item
@@ -91,7 +92,7 @@ defmodule GhostEditor.UI.FileMenu do
         nil
 
       _ ->
-        column(size: displays.menu.size) do
+        column(size: size) do
           panel(height: height, border: %{color: @default_border_color}, padding: 0) do
             for file <- displays.menu.files do
               label(
@@ -105,55 +106,3 @@ defmodule GhostEditor.UI.FileMenu do
     end
   end
 end
-
-# MenuTraverseEvents.event(:traverse_down, %{
-#   model: %{
-#     model
-#     | displays: %{
-#         menu: %{
-#           focussed_file: focussed_file,
-#           traverse: displays.menu.traverse,
-#           files: displays.menu.files
-#         }
-#       }
-#   }
-# })
-
-# MenuTraverseEvents.event(:traverse_down, %{
-#   model: %{
-#     model
-#     | displays: %{
-#         menu: %{
-#           focussed_file: focussed_file,
-#           traverse: displays.menu.traverse,
-#           files: displays.menu.files
-#         }
-#       }
-#   }
-# })
-
-# SwitchEvents.event(:focus_menu, %{
-#   model: %{
-#     model
-#     | displays: %{
-#         menu: %{
-#           focussed_file: focussed_file,
-#           traverse: displays.menu.traverse,
-#           files: displays.menu.files
-#         }
-#       }
-#   }
-# })
-
-# SwitchEvents.event(:focus_screen, %{
-#   model: %{
-#     model
-#     | displays: %{
-#         menu: %{
-#           focussed_file: focussed_file,
-#           traverse: displays.menu.traverse,
-#           files: displays.menu.files
-#         }
-#       }
-#   }
-# })

@@ -3,10 +3,6 @@ defmodule GhostEditor.Actions.Typing do
   alias GhostEditor.Actions.Typing.TypingEvents
   alias GhostEditor.Actions.Switch.SwitchEvents
 
-  def init(model) do
-    model
-  end
-
   @spec update(
           any(),
           {:event,
@@ -19,7 +15,13 @@ defmodule GhostEditor.Actions.Typing do
                | Ratatouille.Constants.key(:ctrl_w),
              ch: ?w | ?s | ?d | ?a | char()
            }}
-        ) :: any()
+        ) :: %{
+          displays: %{
+            text: String.t(),
+            text_cursor: %{text_cursor_x: number(), text_cursor_y: number()},
+            cursor_position: %{cursor_position_x: number(), cursor_position_y: number()}
+          }
+        }
 
   def update(model, message) do
     %{

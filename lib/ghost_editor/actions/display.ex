@@ -2,10 +2,6 @@ defmodule GhostEditor.Actions.Display do
   use GhostEditor.Constants.Keys
   alias GhostEditor.Actions.Display.DisplayEvents
 
-  def init(model) do
-    model
-  end
-
   @spec update(
           any(),
           {:event,
@@ -14,7 +10,9 @@ defmodule GhostEditor.Actions.Display do
                Ratatouille.Constants.key(:ctrl_m)
                | Ratatouille.Constants.key(:ctrl_d)
            }}
-        ) :: any()
+        ) :: %{
+          displays: %{screen: %{show: 0 | 1}, menu: %{show: 0 | 1}}
+        }
 
   def update(model, message) do
     case message do

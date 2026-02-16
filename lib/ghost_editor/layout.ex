@@ -1,30 +1,41 @@
 defmodule GhostEditor.Layout do
   use GhostEditor.Constants.Colors
 
+  alias GhostEditor.Actions.Display
+  alias GhostEditor.Actions.Switch
+  alias GhostEditor.Actions.Traverse.MenuTraverse
+  alias GhostEditor.Actions.Typing
+
   alias GhostEditor.UI.FileMenu
   alias GhostEditor.UI.Screen
 
-  @spec render(any()) :: %{
-          displays: %{
-            screen: %{size: number()},
-            menu: %{
-              show: 0 | 1,
-              size: number(),
-              files: [String.t()],
-              traverse: %{up: number()},
-              focussed_file: String.t()
-            }
-          }
-        }
+  def update(model, message) do
+    case model do
+      %{displays: %{menu: %{focus: 0}}} ->
+        MenuTraverse.update(model, message)
+        Switch.update(model, message)
+
+      %{displays: %{menu: %{focus: 1}}} ->
+        MenuTraverse.update(model, message)
+
+      %{displays: %{screen: %{focus: 0}}} ->
+        Typing.update(model, message)
+
+      %{displays: %{screen: %{focus: 1}}} ->
+        Typing.update(model, message)
+
+      %{displays: %{screen: %{show: 1}, menu: %{show: 0}}} ->
+        Display.update(model, message)
+
+      %{displays: %{screen: %{show: 0}, menu: %{show: 1}}} ->
+        Display.update(model, message)
+    end
+  end
 
   def render(model) do
-    %{
-      window: window,
-      displays: displays
-    } =
-      model
-
     {_, files} = File.ls()
+
+    %{displays: displays} = model
 
     case displays do
       %{menu: %{traverse: %{up: up}}} ->
@@ -48,6 +59,8 @@ defmodule GhostEditor.Layout do
         )
 
       %{screen: %{show: 1}, menu: %{show: 0}} ->
+        %{window: window} = model
+
         {screen_size, _} = Integer.parse("#{window.height / 2 - 14}")
 
         Screen.render(
@@ -87,7 +100,7 @@ defmodule GhostEditor.Layout do
           },
           FileMenu.render(%{
             model
-            | displays: %{menu: %{size: 2, files: files}}
+            | displays: %{menu: %{size: 2, files: files}, screen: %{size: 10}}
           })
         )
     end

@@ -2,6 +2,7 @@ defmodule GhostEditor.UI.Screen do
   import Ratatouille.View
   use GhostEditor.Constants.Colors
   alias GhostEditor.UI.CursorBar
+  alias GhostEditor.AdjustSize
 
   @spec render(
           %{
@@ -20,12 +21,13 @@ defmodule GhostEditor.UI.Screen do
   def render(model, menu) do
     %{
       window: window,
-      text: text,
-      displays: %{screen: %{size: size}}
+      text: text
     } =
       model
 
     height = window.height - 2
+
+    size = AdjustSize.adjust(:screen, %{model: model})
 
     focussed_file = ""
 
@@ -41,7 +43,7 @@ defmodule GhostEditor.UI.Screen do
         {:error, reason} -> raise reason
       end
 
-    view(bottom_bar: CursorBar.render(model)) do
+    view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
       overlay(padding: 0) do
         row do
           menu

@@ -1,11 +1,6 @@
 defmodule GhostEditor.Actions.Switch do
   alias GhostEditor.Actions.Switch.SwitchEvents
-
   use GhostEditor.Constants.Keys
-
-  def init(model) do
-    model
-  end
 
   @spec update(
           any(),
@@ -15,7 +10,17 @@ defmodule GhostEditor.Actions.Switch do
                Ratatouille.Constants.key(:ctrl_w)
                | Ratatouille.Constants.key(:ctrl_e)
            }}
-        ) :: any()
+        ) :: %{
+          displays: %{
+            screen: %{focus: 0 | 1},
+            menu: %{
+              focus: 0 | 1,
+              traverse: %{up: number()},
+              files: [String.t()],
+              focussed_file: String.t()
+            }
+          }
+        }
 
   def update(model, message) do
     case message do

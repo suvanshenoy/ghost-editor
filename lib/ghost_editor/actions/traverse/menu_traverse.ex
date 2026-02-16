@@ -10,7 +10,16 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverse do
   @spec update(any(), {
           :event,
           %{ch: ?j | ?k, key: Ratatouille.Constants.key(:ctrl_e)}
-        }) :: any()
+        }) :: %{
+          displays: %{
+            menu: %{
+              focus: 1,
+              traverse: %{up: number()},
+              files: [String.t()],
+              focussed_file: String.t()
+            }
+          }
+        }
 
   def update(model, message) do
     case message do
