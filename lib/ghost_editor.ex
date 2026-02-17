@@ -1,6 +1,5 @@
 defmodule GhostEditor do
   @behaviour Ratatouille.App
-
   alias GhostEditor.Layout
 
   @impl true

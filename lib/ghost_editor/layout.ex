@@ -1,17 +1,23 @@
 defmodule GhostEditor.Layout do
   use GhostEditor.Constants.Colors
-
-  alias GhostEditor.Actions.Display
   alias GhostEditor.Actions.Switch
   alias GhostEditor.Actions.Traverse.MenuTraverse
   alias GhostEditor.Actions.Typing
-
   alias GhostEditor.UI.FileMenu
   alias GhostEditor.UI.Screen
+  # alias GhostEditor.UI.Screen.TerminalScreen
 
   def update(model, message) do
     case model do
       %{displays: %{menu: %{focus: 0}}} ->
+        MenuTraverse.update(model, message)
+        Switch.update(model, message)
+
+      %{displays: %{menu: %{show: 0}, screen: %{show: 1}}} ->
+        MenuTraverse.update(model, message)
+        Switch.update(model, message)
+
+      %{displays: %{menu: %{show: 1}, screen: %{show: 0}}} ->
         MenuTraverse.update(model, message)
         Switch.update(model, message)
 
@@ -23,12 +29,6 @@ defmodule GhostEditor.Layout do
 
       %{displays: %{screen: %{focus: 1}}} ->
         Typing.update(model, message)
-
-      %{displays: %{screen: %{show: 1}, menu: %{show: 0}}} ->
-        Display.update(model, message)
-
-      %{displays: %{screen: %{show: 0}, menu: %{show: 1}}} ->
-        Display.update(model, message)
     end
   end
 
@@ -72,7 +72,7 @@ defmodule GhostEditor.Layout do
           },
           FileMenu.render(%{
             model
-            | displays: %{menu: %{show: 0}}
+            | displays: %{menu: %{size: 0, show: 0}}
           })
         )
 

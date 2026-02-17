@@ -30,8 +30,11 @@ defmodule GhostEditor.AdjustSize do
 
     size =
       cond do
-        window.width < 192 -> displays.cursor_bar.size + 2
-        true -> displays.cursor_bar.size
+        window.width < 192 ->
+          displays.cursor_bar.size + 3
+
+        true ->
+          displays.cursor_bar.size + 1
       end
 
     size

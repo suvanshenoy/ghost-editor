@@ -11,6 +11,7 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
           %{
             model: any(),
             text: String.t(),
+            ch: char(),
             text_cursor_x: number(),
             text_cursor_y: number(),
             cursor_position_x: number(),
@@ -19,32 +20,42 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
         ) :: %{
           displays: %{
             text: String.t(),
+            ch: char(),
+            key: String.t(),
             text_cursor: %{text_cursor_x: number(), text_cursor_y: number()},
             cursor_position: %{cursor_position_x: number(), cursor_position_y: number()}
           }
         }
 
-  def event(:delete, %{model: model, text: text, cursor_position_x: posX, cursor_position_y: posY}) do
+  def event(:delete, %{
+        model: model,
+        text: text,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     cond do
       posX < 1 && String.length(text) - 1 == -1 ->
         %{
           model
           | text: text <> "",
-            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX}
+            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX},
+            key: "backspace"
         }
 
       posY == 0 && posX > 0 ->
         %{
           model
           | text: String.slice(text, 0, String.length(text) - 1),
-            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX - 1}
+            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX - 1},
+            key: "backspace"
         }
 
       posX == 0 && posY > 0 ->
         %{
           model
           | text: String.slice(text, 0, String.length(text) - 1),
-            cursor_position: %{cursor_position_y: posY - 1, cursor_position_x: posX}
+            cursor_position: %{cursor_position_y: posY - 1, cursor_position_x: posX},
+            key: "backspace"
         }
     end
   end
@@ -63,12 +74,18 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
       %{
         model
         | text: text <> " ",
-          cursor_position: %{cursor_position_y: posY, cursor_position_x: posX + 1}
+          cursor_position: %{cursor_position_y: posY, cursor_position_x: posX + 1},
+          key: "space"
       }
     end
   end
 
-  def event(:enter, %{model: model, text: text, cursor_position_x: posX, cursor_position_y: posY}) do
+  def event(:enter, %{
+        model: model,
+        text: text,
+        cursor_position_x: posX,
+        cursor_position_y: posY
+      }) do
     %{window: window} = model
 
     if(posY == window.height - 25) do
@@ -77,7 +94,8 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
       %{
         model
         | text: text <> "\n",
-          cursor_position: %{cursor_position_y: posY + 1, cursor_position_x: posX}
+          cursor_position: %{cursor_position_y: posY + 1, cursor_position_x: posX},
+          key: "enter"
       }
     end
   end
@@ -97,6 +115,7 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
       %{
         model
         | text: text <> <<ch::utf8>>,
+          key: <<ch::utf8>>,
           cursor_position: %{cursor_position_y: posY, cursor_position_x: posX + 1}
       }
     end

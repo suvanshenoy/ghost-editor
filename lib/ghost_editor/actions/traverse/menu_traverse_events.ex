@@ -21,8 +21,7 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
           menu: %{
             focus: 1,
             traverse: %{up: up},
-            files: displays.menu.files,
-            focussed_file: displays.menu.focussed_file
+            files: displays.menu.files
           }
         }
     }
@@ -39,8 +38,7 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
           menu: %{
             focus: 1,
             traverse: %{up: up},
-            files: displays.menu.files,
-            focussed_file: displays.menu.focussed_file
+            files: displays.menu.files
           }
         }
     }
