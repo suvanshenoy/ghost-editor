@@ -13,7 +13,7 @@ defmodule GhostEditor.UI.CursorBar do
   def render(model) do
     %{
       cursor_position: %{cursor_position_x: posX, cursor_position_y: posY},
-      text: text,
+      # text: text,
       key: key
     } =
       model

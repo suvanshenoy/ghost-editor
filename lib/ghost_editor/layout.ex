@@ -59,15 +59,11 @@ defmodule GhostEditor.Layout do
         )
 
       %{screen: %{show: 1}, menu: %{show: 0}} ->
-        %{window: window} = model
-
-        {screen_size, _} = Integer.parse("#{window.height / 2 - 14}")
-
         Screen.render(
           %{
             model
             | displays: %{
-                screen: %{size: screen_size}
+                screen: %{size: 12.9}
               }
           },
           FileMenu.render(%{

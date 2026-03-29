@@ -2,18 +2,11 @@ version: "3"
 
 tasks:
   setup:
-    dotenv:
-      - ./.env
-    cmd: nix develop --no-write-lock-file $FLAKE_URL --command $SHELL
+    cmds:
+      - mise use erlang
+      - mise use elixir
 
   dev:
     cmds:
       - mix deps.get
       - mix run --no-halt
-
-  # prod:
-  #   dotenv:
-  #     - ./.env
-  #   cmds:
-  #     - defer: ./_build/prod/rel/ghosteditor/bin/ghosteditor start
-  #     - MIX_ENV=$MIX_ENV mix release
