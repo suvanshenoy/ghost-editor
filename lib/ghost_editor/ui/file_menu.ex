@@ -1,6 +1,7 @@
 defmodule GhostEditor.UI.FileMenu do
   import Ratatouille.View
   use GhostEditor.Constants.Colors
+  use GhostEditor.Constants.Paths
   alias GhostEditor.AdjustSize
 
   @spec render(%{
@@ -27,11 +28,19 @@ defmodule GhostEditor.UI.FileMenu do
 
     size = AdjustSize.adjust(:menu, %{model: model})
 
+    if not File.exists?(@cache_dir) do
+      File.cd!(Path.expand("~"))
+      File.mkdir!(@cache_dir)
+      File.open(@focussed_file_path)
+    end
+
     case displays.menu do
       %{traverse: %{up: up}} ->
         cond do
           up == 0 ->
             {focussed_file, other_files} = List.pop_at(displays.menu.files, up)
+
+            File.write!(@focussed_file_path, focussed_file)
 
             column(size: size) do
               panel(height: height, border: %{color: @default_border_color}, padding: 0) do
@@ -55,6 +64,8 @@ defmodule GhostEditor.UI.FileMenu do
 
           true ->
             {focussed_file, _} = List.pop_at(displays.menu.files, up)
+
+            File.write!(@focussed_file_path, focussed_file)
 
             menu_list = []
 

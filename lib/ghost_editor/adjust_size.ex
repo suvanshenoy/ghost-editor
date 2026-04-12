@@ -6,7 +6,7 @@ defmodule GhostEditor.AdjustSize do
 
     size =
       cond do
-        window.width < 192 -> displays.menu.size + 1
+        window.width < 192 -> displays.menu.size + 0.9
         true -> displays.menu.size
       end
 
