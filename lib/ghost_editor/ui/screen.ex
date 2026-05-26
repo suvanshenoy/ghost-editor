@@ -32,32 +32,80 @@ defmodule GhostEditor.UI.Screen do
 
     data = File.read!(@focussed_file_path)
 
-    data =
+    element =
       cond do
-        File.dir?(data) ->
-          data
+        File.dir?(data) || is_archived_file(data) ->
+          files =
+            cond do
+              is_archived_file(data) ->
+                list_archived_files(data)
+
+              true ->
+                files = Path.wildcard("#{data}/**")
+                files
+            end
+
+          view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
+            overlay(padding: 0) do
+              row do
+                menu
+
+                column(size: size) do
+                  panel(height: height, border: %{color: @default_border_color}) do
+                    for file <- files do
+                      label(
+                        content: "#{file}",
+                        attributes: [:bold],
+                        color: @default_text_color
+                      )
+                    end
+                  end
+                end
+              end
+            end
+          end
 
         true ->
           data = File.read!(data)
-          data
-      end
 
-    view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
-      overlay(padding: 0) do
-        row do
-          menu
+          view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
+            overlay(padding: 0) do
+              row do
+                menu
 
-          column(size: size) do
-            panel(height: height, border: %{color: @default_border_color}) do
-              label(
-                content: text <> "|" <> "#{data}",
-                attributes: [:bold],
-                color: @default_text_color
-              )
+                column(size: size) do
+                  panel(height: height, border: %{color: @default_border_color}) do
+                    label(
+                      content: text <> "|" <> "#{data}",
+                      attributes: [:bold],
+                      color: @default_text_color
+                    )
+                  end
+                end
+              end
             end
           end
-        end
       end
+
+    element
+  end
+
+  defp is_archived_file(file_name) do
+    cond do
+      Path.extname(file_name) == ".zip" || Path.extname(file_name) == ".xz" ->
+        {Path.extname(file_name), true}
+
+      true ->
+        false
+    end
+  end
+
+  defp list_archived_files(file_name) do
+    cond do
+      is_archived_file(file_name) && Path.extname(file_name) == ".zip" ->
+        {:ok, files} = file_name |> to_charlist() |> :zip.unzip()
+        File.rm_rf!(hd(String.split(file_name, ".zip")))
+        files
     end
   end
 end
