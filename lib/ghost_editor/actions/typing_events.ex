@@ -57,6 +57,9 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
             cursor_position: %{cursor_position_y: posY - 1, cursor_position_x: posX},
             key: "backspace"
         }
+
+      true ->
+        model
     end
   end
 

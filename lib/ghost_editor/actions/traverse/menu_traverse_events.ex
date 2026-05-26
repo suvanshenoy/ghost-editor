@@ -4,8 +4,7 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
             menu: %{
               focus: 1,
               traverse: %{up: number()},
-              files: [String.t()],
-              focussed_file: String.t()
+              files: [String.t()]
             }
           }
         }
