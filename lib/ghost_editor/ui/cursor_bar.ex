@@ -30,11 +30,13 @@ defmodule GhostEditor.UI.CursorBar do
       bar do
         row do
           column(size: size) do
-            label(
-              content: "(curX: #{posX}%, curY: #{posY}%, key: #{key})",
-              color: @default_text_color,
-              attributes: [:bold]
-            )
+            viewport(offset_x: -7) do
+              label(
+                content: "(curX: #{posX}%, curY: #{posY}%, key: #{key})",
+                color: @default_text_color,
+                attributes: [:bold]
+              )
+            end
           end
         end
       end

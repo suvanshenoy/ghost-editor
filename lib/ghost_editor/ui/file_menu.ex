@@ -43,7 +43,7 @@ defmodule GhostEditor.UI.FileMenu do
             File.write!(@focussed_file_path, focussed_file)
 
             column(size: size) do
-              panel(height: height, border: %{color: @default_border_color}, padding: 0) do
+              panel(height: height + 2, border: %{color: @default_border_color}, padding: 0) do
                 panel(height: 3, padding: 0) do
                   label(
                     content: "#{focussed_file}",
@@ -91,7 +91,7 @@ defmodule GhostEditor.UI.FileMenu do
               )
 
             column(size: size) do
-              panel(height: height, border: %{color: @default_border_color}, padding: 0) do
+              panel(height: height + 2, border: %{color: @default_border_color}, padding: 0) do
                 for menu_item <- menu_list do
                   menu_item
                 end
