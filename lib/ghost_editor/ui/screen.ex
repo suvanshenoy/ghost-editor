@@ -51,7 +51,11 @@ defmodule GhostEditor.UI.Screen do
                 menu
 
                 column(size: size) do
-                  panel(height: height, border: %{color: @default_border_color}) do
+                  panel(
+                    height: height + 2,
+                    border: %{color: @default_border_color},
+                    padding: 0
+                  ) do
                     for file <- files do
                       label(
                         content: "#{file}",
@@ -74,7 +78,11 @@ defmodule GhostEditor.UI.Screen do
                 menu
 
                 column(size: size) do
-                  panel(height: height, border: %{color: @default_border_color}) do
+                  panel(
+                    height: height + 2,
+                    border: %{color: @default_border_color},
+                    padding: 0
+                  ) do
                     label(
                       content: text <> "|" <> "#{data}",
                       attributes: [:bold],
