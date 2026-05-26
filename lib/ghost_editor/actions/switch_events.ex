@@ -7,8 +7,7 @@ defmodule GhostEditor.Actions.Switch.SwitchEvents do
             menu: %{
               focus: 0 | 1,
               traverse: %{up: number()},
-              files: [String.t()],
-              focussed_file: String.t()
+              files: [String.t()]
             }
           }
         }
@@ -22,8 +21,7 @@ defmodule GhostEditor.Actions.Switch.SwitchEvents do
           screen: %{focus: 1},
           menu: %{
             traverse: %{up: displays.menu.traverse.up},
-            files: displays.menu.files,
-            focussed_file: displays.menu.focussed_file
+            files: displays.menu.files
           }
         }
     }
@@ -39,8 +37,7 @@ defmodule GhostEditor.Actions.Switch.SwitchEvents do
           menu: %{
             focus: 1,
             traverse: %{up: displays.menu.traverse.up},
-            files: displays.menu.files,
-            focussed_file: displays.menu.focussed_file
+            files: displays.menu.files
           }
         }
     }
