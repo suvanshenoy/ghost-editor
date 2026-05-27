@@ -2,8 +2,9 @@ defmodule GhostEditor.UI.Screen do
   import Ratatouille.View
   use GhostEditor.Constants.Colors
   use GhostEditor.Constants.Paths
-  alias GhostEditor.UI.CursorBar
   alias GhostEditor.AdjustSize
+  alias GhostEditor.UI.CursorBar
+  import GhostEditor.Utils.FunctionName, only: [name: 0]
 
   @spec render(
           %{
@@ -109,11 +110,16 @@ defmodule GhostEditor.UI.Screen do
   end
 
   defp list_archived_files(file_name) do
-    cond do
-      is_archived_file(file_name) && Path.extname(file_name) == ".zip" ->
+    {file_extension, _} = is_archived_file(file_name)
+
+    case file_extension do
+      ".zip" ->
         {:ok, files} = file_name |> to_charlist() |> :zip.unzip()
         File.rm_rf!(hd(String.split(file_name, ".zip")))
         files
+
+      _ ->
+        raise "#{file_extension} is not implemented for #{name()}"
     end
   end
 end
