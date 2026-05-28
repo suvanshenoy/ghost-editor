@@ -26,7 +26,6 @@ defmodule GhostEditor.Actions.Typing do
   def update(model, message) do
     %{
       text: text,
-      text_cursor: %{text_cursor_x: x, text_cursor_y: y},
       cursor_position: %{cursor_position_x: posX, cursor_position_y: posY},
       displays: displays
     } =

@@ -19,13 +19,6 @@ defmodule GhostEditor.Constants.Keys do
       @move_right ?h
       @move_left ?l
 
-      @scroll_keys [
-        @scroll_up,
-        @scroll_down,
-        @scroll_right,
-        @scroll_left
-      ]
-
       @delete_keys [
         @backspace,
         @backspace2
