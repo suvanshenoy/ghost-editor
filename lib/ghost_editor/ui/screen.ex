@@ -102,7 +102,7 @@ defmodule GhostEditor.UI.Screen do
   defp is_archived_file(file_name) do
     cond do
       Path.extname(file_name) == ".zip" || Path.extname(file_name) == ".tar" ||
-          Path.expand(file_name) == ".gz" ->
+          Path.extname(file_name) == ".gz" ->
         {Path.extname(file_name), true}
 
       true ->
