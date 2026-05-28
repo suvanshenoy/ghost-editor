@@ -3,11 +3,7 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
           :delete
           | :spacebar
           | :enter
-          | :text
-          | :scroll_up
-          | :scroll_down
-          | :scroll_right
-          | :scroll_left,
+          | :text,
           %{
             model: any(),
             text: String.t(),
@@ -123,92 +119,4 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
       }
     end
   end
-
-  def event(:scroll_up, %{
-        model: model,
-        text_cursor_x: x,
-        text_cursor_y: y,
-        cursor_position_x: posX,
-        cursor_position_y: posY
-      }) do
-    %{
-      model
-      | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-        cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-    }
-  end
-
-  def event(:scroll_down, %{
-        model: model,
-        text_cursor_x: x,
-        text_cursor_y: y,
-        cursor_position_x: posX,
-        cursor_position_y: posY
-      }) do
-    %{
-      model
-      | text_cursor: %{text_cursor_y: y + 2, text_cursor_x: x},
-        cursor_position: %{cursor_position_y: posY + 2, cursor_position_x: posX}
-    }
-  end
-
-  def event(:scroll_left, %{
-        model: model,
-        text_cursor_x: x,
-        text_cursor_y: y,
-        cursor_position_x: posX,
-        cursor_position_y: posY
-      }) do
-    %{
-      model
-      | text_cursor: %{text_cursor_y: y, text_cursor_x: x - 2},
-        cursor_position: %{cursor_position_y: posY, cursor_position_x: posX - 2}
-    }
-  end
-
-  def event(:scroll_right, %{
-        model: model,
-        text_cursor_x: x,
-        text_cursor_y: y,
-        cursor_position_x: posX,
-        cursor_position_y: posY
-      }) do
-    %{
-      model
-      | text_cursor: %{text_cursor_y: y, text_cursor_x: x + 2},
-        cursor_position: %{cursor_position_y: posY, cursor_position_x: posX + 2}
-    }
-  end
-
-  # def move_up_event(model, x, y, posX, posY) do
-  # %{
-  #   model
-  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-  # }
-  # end
-
-  # def move_down_event(model, x, y, posX, posY) do
-  # %{
-  #   model
-  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-  # }
-  # end
-
-  # def move_left_event(model, x, y, posX, posY) do
-  # %{
-  #   model
-  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-  # }
-  # end
-
-  # def move_right_event(model, x, y, posX, posY) do
-  # %{
-  #   model
-  #   | text_cursor: %{text_cursor_y: y - 2, text_cursor_x: x},
-  #     cursor_position: %{cursor_position_y: posY - 2, cursor_position_x: posX}
-  # }
-  # end
 end

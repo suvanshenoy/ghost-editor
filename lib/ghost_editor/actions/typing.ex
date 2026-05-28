@@ -60,45 +60,9 @@ defmodule GhostEditor.Actions.Typing do
             })
         end
 
-      {:event, %{ch: ch}} when ch in @scroll_keys or ch > 0 ->
-        case ch do
-          @scroll_up ->
-            TypingEvents.event(:scroll_up, %{
-              model: model,
-              text_cursor_x: x,
-              text_cursor_y: y,
-              cursor_position_x: posX,
-              cursor_position_y: posY
-            })
-
-          @scroll_down ->
-            TypingEvents.event(:scroll_down, %{
-              model: model,
-              text_cursor_x: x,
-              text_cursor_y: y,
-              cursor_position_x: posX,
-              cursor_position_y: posY
-            })
-
-          @scroll_left ->
-            TypingEvents.event(:scroll_left, %{
-              model: model,
-              text_cursor_x: x,
-              text_cursor_y: y,
-              cursor_position_x: posX,
-              cursor_position_y: posY
-            })
-
-          @scroll_right ->
-            TypingEvents.event(:scroll_right, %{
-              model: model,
-              text_cursor_x: x,
-              text_cursor_y: y,
-              cursor_position_x: posX,
-              cursor_position_y: posY
-            })
-
-          _ ->
+      {:event, %{ch: ch}} when ch > 0 ->
+        cond do
+          String.printable?(<<ch::utf8>>) ->
             TypingEvents.event(:text, %{
               model: model,
               text: text,
@@ -107,21 +71,6 @@ defmodule GhostEditor.Actions.Typing do
               cursor_position_y: posY
             })
         end
-
-      # {:event, %{ch: ch}} when ch in @motion_keys ->
-      #   case ch do
-      #     @move_up ->
-      #       TypingEvents.move_up_event(model, x, y, posX, posY)
-
-      #     @move_down ->
-      #       TypingEvents.move_down_event(model, x, y, posX, posY)
-
-      #     @move_left ->
-      #       TypingEvents.move_left_event(model, x, y, posX, posY)
-
-      #     @move_right ->
-      #       TypingEvents.move_right_event(model, x, y, posX, posY)
-      #   end
 
       {:event, %{key: @ctrl_w}} ->
         %{model | displays: %{screen: displays.screen, menu: displays.menu}}
