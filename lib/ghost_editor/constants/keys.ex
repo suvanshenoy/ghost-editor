@@ -14,11 +14,6 @@ defmodule GhostEditor.Constants.Keys do
       @ctrl_w key(:ctrl_w)
       @ctrl_e key(:ctrl_e)
 
-      @scroll_up ?w
-      @scroll_down ?s
-      @scroll_right ?d
-      @scroll_left ?a
-
       @move_up ?k
       @move_down ?j
       @move_right ?h
