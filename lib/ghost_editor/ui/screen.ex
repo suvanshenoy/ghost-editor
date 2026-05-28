@@ -101,7 +101,8 @@ defmodule GhostEditor.UI.Screen do
 
   defp is_archived_file(file_name) do
     cond do
-      Path.extname(file_name) == ".zip" || Path.extname(file_name) == ".xz" ->
+      Path.extname(file_name) == ".zip" || Path.extname(file_name) == ".tar" ||
+          Path.extname(file_name) == ".gz" ->
         {Path.extname(file_name), true}
 
       true ->
@@ -116,6 +117,14 @@ defmodule GhostEditor.UI.Screen do
       ".zip" ->
         {:ok, files} = file_name |> to_charlist() |> :zip.unzip()
         File.rm_rf!(hd(String.split(file_name, ".zip")))
+        files
+
+      ".tar" ->
+        {:ok, files} = :erl_tar.table(file_name)
+        files
+
+      ".gz" ->
+        {:ok, files} = :erl_tar.table(file_name, [:compressed])
         files
 
       _ ->
