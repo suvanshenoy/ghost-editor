@@ -1,4 +1,4 @@
-# GhostEditor
+# ghost-editor
 
 ## Setup Instructions
 
