@@ -46,6 +46,8 @@ defmodule GhostEditor.UI.Screen do
                 files
             end
 
+          [root_file | rest_files] = files
+
           view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
             overlay(padding: 0) do
               row do
@@ -57,13 +59,7 @@ defmodule GhostEditor.UI.Screen do
                     border: %{color: @default_border_color},
                     padding: 0
                   ) do
-                    for file <- files do
-                      label(
-                        content: "#{file}",
-                        attributes: [:bold],
-                        color: @default_text_color
-                      )
-                    end
+                    directory_tree(root_file, rest_files)
                   end
                 end
               end
@@ -129,6 +125,17 @@ defmodule GhostEditor.UI.Screen do
 
       _ ->
         raise "#{file_extension} is not implemented for #{name()}"
+    end
+  end
+
+  defp directory_tree(root_file, rest_files) do
+    tree do
+      tree_node(content: hd(String.split(root_file, "/"))) do
+        for file <- rest_files do
+          tree_node(content: tl(String.split(file, "/"))) do
+          end
+        end
+      end
     end
   end
 end
