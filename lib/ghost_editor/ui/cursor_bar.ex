@@ -14,7 +14,8 @@ defmodule GhostEditor.UI.CursorBar do
     %{
       cursor_position: %{cursor_position_x: posX, cursor_position_y: posY},
       # text: text,
-      key: key
+      key: key,
+      mode: mode
     } =
       model
 
@@ -31,7 +32,7 @@ defmodule GhostEditor.UI.CursorBar do
         row do
           column(size: size) do
             label(
-              content: "(curX: #{posX}%, curY: #{posY}%, key: #{key})",
+              content: "(curX: #{posX}%, curY: #{posY}%, key: #{key}, mode: #{mode})",
               color: @default_text_color,
               attributes: [:bold]
             )

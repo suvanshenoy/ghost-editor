@@ -14,6 +14,7 @@ defmodule GhostEditor do
         menu: %{size: 0, show: 0, traverse: %{up: 0}, files: [], focus: 0, focussed_file: ""},
         cursor_bar: %{size: 0}
       },
+      mode: "",
       key: ""
     }
 

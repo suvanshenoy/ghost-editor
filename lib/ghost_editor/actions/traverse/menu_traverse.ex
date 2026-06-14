@@ -1,7 +1,6 @@
 defmodule GhostEditor.Actions.Traverse.MenuTraverse do
   use GhostEditor.Constants.Keys
   alias GhostEditor.Actions.Traverse.MenuTraverseEvents
-  alias GhostEditor.Actions.Switch.SwitchEvents
 
   def init(model) do
     model
@@ -24,9 +23,6 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverse do
     case message do
       {:event, %{ch: @move_down}} ->
         MenuTraverseEvents.event(:traverse_down, %{model: model})
-
-      {:event, %{key: @ctrl_e}} ->
-        SwitchEvents.event(:focus_screen, %{model: model})
 
       {:event, %{ch: @move_up}} ->
         MenuTraverseEvents.event(:traverse_up, %{model: model})

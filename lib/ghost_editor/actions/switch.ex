@@ -1,7 +1,6 @@
 defmodule GhostEditor.Actions.Switch do
   use GhostEditor.Constants.Keys
   alias GhostEditor.Actions.Switch.SwitchEvents
-  alias GhostEditor.Actions.Display.DisplayEvents
 
   @spec update(
           any(),
@@ -32,12 +31,6 @@ defmodule GhostEditor.Actions.Switch do
 
           @ctrl_e ->
             SwitchEvents.event(:focus_screen, %{model: model})
-
-          @ctrl_m ->
-            DisplayEvents.event(:display_menu, %{model: model})
-
-          @ctrl_d ->
-            DisplayEvents.event(:display_screen, %{model: model})
 
           _ ->
             model
