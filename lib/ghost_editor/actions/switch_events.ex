@@ -17,11 +17,14 @@ defmodule GhostEditor.Actions.Switch.SwitchEvents do
 
     %{
       model
-      | displays: %{
-          screen: %{focus: 1},
+      | mode: "switch",
+        key: "ctrl_e",
+        displays: %{
+          screen: %{focus: 1, size: displays.menu.size},
           menu: %{
-            traverse: %{up: displays.menu.traverse.up},
-            files: displays.menu.files
+            focus: 0,
+            size: displays.menu.size,
+            traverse: %{up: 1}
           }
         }
     }
@@ -32,12 +35,14 @@ defmodule GhostEditor.Actions.Switch.SwitchEvents do
 
     %{
       model
-      | displays: %{
-          screen: %{focus: 0},
+      | mode: "switch",
+        key: "ctrl_w",
+        displays: %{
+          screen: %{focus: 0, size: displays.menu.size},
           menu: %{
             focus: 1,
-            traverse: %{up: displays.menu.traverse.up},
-            files: displays.menu.files
+            size: displays.menu.size,
+            traverse: %{up: 1}
           }
         }
     }

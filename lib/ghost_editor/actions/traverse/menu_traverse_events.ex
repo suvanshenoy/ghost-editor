@@ -16,11 +16,13 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
 
     %{
       model
-      | displays: %{
+      | mode: "traverse",
+        key: "j",
+        displays: %{
           menu: %{
             focus: 1,
-            traverse: %{up: up},
-            files: displays.menu.files
+            size: displays.menu.size,
+            traverse: %{up: up}
           }
         }
     }
@@ -33,11 +35,13 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
 
     %{
       model
-      | displays: %{
+      | mode: "traverse",
+        key: "k",
+        displays: %{
           menu: %{
             focus: 1,
-            traverse: %{up: up},
-            files: displays.menu.files
+            size: displays.menu.size,
+            traverse: %{up: up}
           }
         }
     }

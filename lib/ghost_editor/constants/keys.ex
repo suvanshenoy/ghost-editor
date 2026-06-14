@@ -13,11 +13,17 @@ defmodule GhostEditor.Constants.Keys do
       @ctrl_m key(:ctrl_m)
       @ctrl_w key(:ctrl_w)
       @ctrl_e key(:ctrl_e)
+      @ctrl_r key(:ctrl_r)
 
       @move_up ?k
       @move_down ?j
       @move_right ?h
       @move_left ?l
+
+      @arrow_up key(:arrow_up)
+      @arrow_down key(:arrow_down)
+      @arrow_right key(:arrow_right)
+      @arrow_left key(:arrow_left)
 
       @delete_keys [
         @backspace,
@@ -29,6 +35,13 @@ defmodule GhostEditor.Constants.Keys do
         @move_down,
         @move_right,
         @move_left
+      ]
+
+      @arrow_keys [
+        @arrow_up,
+        @arrow_down,
+        @arrow_right,
+        @arrow_left
       ]
     end
   end

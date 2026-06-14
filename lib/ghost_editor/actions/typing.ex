@@ -1,7 +1,6 @@
 defmodule GhostEditor.Actions.Typing do
   use GhostEditor.Constants.Keys
   alias GhostEditor.Actions.Typing.TypingEvents
-  alias GhostEditor.Actions.Switch.SwitchEvents
 
   @spec update(
           any(),
@@ -26,8 +25,7 @@ defmodule GhostEditor.Actions.Typing do
   def update(model, message) do
     %{
       text: text,
-      cursor_position: %{cursor_position_x: posX, cursor_position_y: posY},
-      displays: displays
+      cursor_position: %{cursor_position_x: posX, cursor_position_y: posY}
     } =
       model
 
@@ -70,10 +68,6 @@ defmodule GhostEditor.Actions.Typing do
               cursor_position_y: posY
             })
         end
-
-      {:event, %{key: @ctrl_w}} ->
-        %{model | displays: %{screen: displays.screen, menu: displays.menu}}
-        SwitchEvents.event(:focus_menu, %{model: model})
 
       _ ->
         model
