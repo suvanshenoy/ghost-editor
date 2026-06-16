@@ -1,3 +1,5 @@
 [tools]
+dprint = "latest"
 elixir = "latest"
 erlang = "latest"
+task = "latest"

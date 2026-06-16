@@ -13,7 +13,6 @@ defmodule GhostEditor.UI.CursorBar do
   def render(model) do
     %{
       cursor_position: %{cursor_position_x: posX, cursor_position_y: posY},
-      # text: text,
       key: key,
       mode: mode
     } =
@@ -21,20 +20,15 @@ defmodule GhostEditor.UI.CursorBar do
 
     size = AdjustSize.adjust(:cursor_bar, %{model: model})
 
-    # key_length =
-    #   cond do
-    #     String.length(text) == 0 -> ""
-    #     true -> String.length(text)
-    #   end
-
     cursor_bar =
       bar do
         row do
           column(size: size) do
             viewport(offset_x: -7) do
               label(
-                content: "(curX: #{posX}%, curY: #{posY}%, key: #{key}, mode: #{mode})",
-                color: @default_text_color,
+                content: "curX: #{posX}%, curY: #{posY}%, key: #{key}, mode: #{mode}",
+                color: :black,
+                background: @default_background_color,
                 attributes: [:bold]
               )
             end

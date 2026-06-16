@@ -46,8 +46,6 @@ defmodule GhostEditor.UI.Screen do
                 files
             end
 
-          [root_file | rest_files] = files
-
           view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
             overlay(padding: 0) do
               row do
@@ -59,7 +57,7 @@ defmodule GhostEditor.UI.Screen do
                     border: %{color: @default_border_color},
                     padding: 0
                   ) do
-                    directory_tree(root_file, rest_files)
+                    directory_tree(files)
                   end
                 end
               end
@@ -128,14 +126,45 @@ defmodule GhostEditor.UI.Screen do
     end
   end
 
-  defp directory_tree(root_file, rest_files) do
-    tree do
-      tree_node(content: hd(String.split(root_file, "/"))) do
-        for file <- rest_files do
-          tree_node(content: tl(String.split(file, "/"))) do
+  defp directory_tree(files) do
+    dirs = []
+
+    dirs =
+      for file <- files do
+        file = String.split(file, "/")
+
+        for f <- file do
+          cond do
+            File.dir?(f) ->
+              dirs ++ f
+
+            true ->
+              dirs
           end
         end
       end
-    end
+
+    dirs = dirs |> List.flatten() |> Enum.uniq()
+
+    # raise dirs
+
+    cond do
+      Enum.count(dirs) == 1 ->
+        tree do
+          tree_node(content: hd(dirs))
+        end
+
+      true ->
+        [_ | rest_dirs] = dirs
+
+        tree do
+          tree_node(content: hd(dirs)) do
+            for dir <- rest_dirs do
+              tree_node(content: dir) do
+              end
+            end
+          end
+        end
+      end
   end
 end
