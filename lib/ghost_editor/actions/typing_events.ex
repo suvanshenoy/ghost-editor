@@ -33,9 +33,10 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
       posX < 1 && String.length(text) - 1 == -1 ->
         %{
           model
-          | text: text <> "",
-            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX},
-            key: "backspace"
+          | mode: "typing",
+            key: "backspace",
+            text: text <> "",
+            cursor_position: %{cursor_position_y: posY, cursor_position_x: posX}
         }
 
       posY == 0 && posX > 0 ->
@@ -49,9 +50,10 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
       posX == 0 && posY > 0 ->
         %{
           model
-          | text: String.slice(text, 0, String.length(text) - 1),
-            cursor_position: %{cursor_position_y: posY - 1, cursor_position_x: posX},
-            key: "backspace"
+          | mode: "typing",
+            key: "backspace",
+            text: String.slice(text, 0, String.length(text) - 1),
+            cursor_position: %{cursor_position_y: posY - 1, cursor_position_x: posX}
         }
 
       true ->
@@ -72,9 +74,10 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     else
       %{
         model
-        | text: text <> " ",
-          cursor_position: %{cursor_position_y: posY, cursor_position_x: posX + 1},
-          key: "space"
+        | mode: "typing",
+          key: "space",
+          text: text <> " ",
+          cursor_position: %{cursor_position_y: posY, cursor_position_x: posX + 1}
       }
     end
   end
@@ -92,9 +95,10 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     else
       %{
         model
-        | text: text <> "\n",
-          cursor_position: %{cursor_position_y: posY + 1, cursor_position_x: posX},
-          key: "enter"
+        | mode: "typing",
+          key: "enter",
+          text: text <> "\n",
+          cursor_position: %{cursor_position_y: posY + 1, cursor_position_x: posX}
       }
     end
   end
@@ -113,8 +117,9 @@ defmodule GhostEditor.Actions.Typing.TypingEvents do
     else
       %{
         model
-        | text: text <> <<ch::utf8>>,
+        | mode: "typing",
           key: <<ch::utf8>>,
+          text: text <> <<ch::utf8>>,
           cursor_position: %{cursor_position_y: posY, cursor_position_x: posX + 1}
       }
     end
