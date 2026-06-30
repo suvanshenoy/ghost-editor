@@ -1,12 +1,11 @@
 version: "3"
 
 tasks:
-  setup:
+  compile:
     cmds:
-      - mise use erlang
-      - mise use elixir
-
-  dev:
+      - mix deps.get
+      - MIX_ENV=prod mix release
+  run:
     cmds:
       - mix deps.get
       - mix run --no-halt

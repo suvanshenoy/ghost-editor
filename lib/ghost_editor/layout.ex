@@ -1,5 +1,6 @@
 defmodule GhostEditor.Layout do
   use GhostEditor.Constants.Colors
+  use GhostEditor.Constants.Paths
   alias GhostEditor.Actions.Resize
   alias GhostEditor.Actions.Switch
   alias GhostEditor.Actions.Traverse.MenuTraverse
@@ -41,7 +42,13 @@ defmodule GhostEditor.Layout do
   end
 
   def render(model) do
-    {_, files} = File.ls()
+    current_file_path = File.read!(@current_file_path)
+
+    files =
+      cond do
+        File.dir?(current_file_path) -> File.ls!(current_file_path)
+        true -> [current_file_path]
+      end
 
     case model do
       %{mode: "traverse", key: "k", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
