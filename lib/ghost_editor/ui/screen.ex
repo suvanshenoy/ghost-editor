@@ -35,10 +35,10 @@ defmodule GhostEditor.UI.Screen do
 
     element =
       cond do
-        File.dir?(data) || is_archived_file(data) ->
+        File.dir?(data) || archived_file?(data) ->
           files =
             cond do
-              is_archived_file(data) ->
+              archived_file?(data) ->
                 list_archived_files(data)
 
               true ->
@@ -58,6 +58,29 @@ defmodule GhostEditor.UI.Screen do
                     padding: 0
                   ) do
                     directory_tree(files)
+                  end
+                end
+              end
+            end
+          end
+
+        dump_file?(data) ->
+          view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
+            overlay(padding: 0) do
+              row do
+                menu
+
+                column(size: size) do
+                  panel(
+                    height: height + 2,
+                    border: %{color: @default_border_color},
+                    padding: 0
+                  ) do
+                    label(
+                      content: text <> "|" <> "#{data}",
+                      attributes: [:bold],
+                      color: @default_text_color
+                    )
                   end
                 end
               end
@@ -93,11 +116,11 @@ defmodule GhostEditor.UI.Screen do
     element
   end
 
-  defp is_archived_file(file_name) do
+  defp archived_file?(file_name) do
     cond do
       Path.extname(file_name) == ".zip" || Path.extname(file_name) == ".tar" ||
           Path.extname(file_name) == ".gz" ->
-        {Path.extname(file_name), true}
+        true
 
       true ->
         false
@@ -105,7 +128,7 @@ defmodule GhostEditor.UI.Screen do
   end
 
   defp list_archived_files(file_name) do
-    {file_extension, _} = is_archived_file(file_name)
+    file_extension = Path.extname(file_name)
 
     case file_extension do
       ".zip" ->
@@ -123,6 +146,13 @@ defmodule GhostEditor.UI.Screen do
 
       _ ->
         raise "#{file_extension} is not implemented for #{name()}"
+    end
+  end
+
+  defp dump_file?(file_name) do
+    cond do
+      Path.extname(file_name) == ".dump" -> true
+      true -> false
     end
   end
 
@@ -146,8 +176,6 @@ defmodule GhostEditor.UI.Screen do
 
     dirs = dirs |> List.flatten() |> Enum.uniq()
 
-    # raise dirs
-
     cond do
       Enum.count(dirs) == 1 ->
         tree do
@@ -165,6 +193,6 @@ defmodule GhostEditor.UI.Screen do
             end
           end
         end
-      end
+    end
   end
 end

@@ -1,11 +1,8 @@
 version: "3"
 
 tasks:
-  compile:
-    cmds:
-      - mix deps.get
-      - MIX_ENV=prod mix release
+  release:
+    cmd: MIX_ENV=prod mix release
+
   run:
-    cmds:
-      - mix deps.get
-      - mix run --no-halt
+    cmd: mix run --no-halt
