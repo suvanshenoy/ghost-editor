@@ -1,7 +1,9 @@
 defmodule GhostEditor.AdjustSize do
+  alias GhostEditor.Model
+
   @spec adjust(:menu | :screen | :cursor_bar, %{model: any()}) :: number()
 
-  def adjust(:menu, %{model: model}) do
+  def adjust(:menu, model = %Model{}) do
     %{window: window, displays: displays} = model
 
     cond do
@@ -16,7 +18,7 @@ defmodule GhostEditor.AdjustSize do
     end
   end
 
-  def adjust(:screen, %{model: model}) do
+  def adjust(:screen, model = %Model{}) do
     %{window: window, displays: displays} = model
 
     cond do
@@ -26,7 +28,7 @@ defmodule GhostEditor.AdjustSize do
     end
   end
 
-  def adjust(:cursor_bar, %{model: model}) do
+  def adjust(:cursor_bar, model = %Model{}) do
     %{window: window, displays: displays} = model
 
     cond do

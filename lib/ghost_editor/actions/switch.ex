@@ -1,6 +1,7 @@
 defmodule GhostEditor.Actions.Switch do
   use GhostEditor.Constants.Keys
   alias GhostEditor.Actions.Switch.SwitchEvents
+  alias GhostEditor.Model
 
   @spec update(
           any(),
@@ -22,15 +23,15 @@ defmodule GhostEditor.Actions.Switch do
           }
         }
 
-  def update(model, message) do
+  def update(model = %Model{}, message) do
     case message do
       {:event, %{key: key}} ->
         case key do
           @ctrl_w ->
-            SwitchEvents.event(:focus_menu, %{model: model})
+            SwitchEvents.event(:focus_menu, model)
 
           @ctrl_e ->
-            SwitchEvents.event(:focus_screen, %{model: model})
+            SwitchEvents.event(:focus_screen, model)
 
           _ ->
             model

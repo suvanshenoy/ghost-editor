@@ -3,6 +3,7 @@ defmodule GhostEditor.UI.FileMenu do
   use GhostEditor.Constants.Colors
   use GhostEditor.Constants.Paths
   alias GhostEditor.AdjustSize
+  alias GhostEditor.Model
 
   @spec render(%{
           window: any(),
@@ -17,7 +18,7 @@ defmodule GhostEditor.UI.FileMenu do
           }
         }) :: any()
 
-  def render(model) do
+  def render(model = %Model{}) do
     %{
       window: window,
       displays: displays
@@ -26,13 +27,7 @@ defmodule GhostEditor.UI.FileMenu do
 
     height = window.height - 2
 
-    size = AdjustSize.adjust(:menu, %{model: model})
-
-    if not File.exists?(@cache_dir) do
-      File.cd!(Path.expand("~"))
-      File.mkdir!(@cache_dir)
-      File.open(@focussed_file_path)
-    end
+    size = AdjustSize.adjust(:menu, model)
 
     case displays.menu do
       %{traverse: %{up: up}} ->

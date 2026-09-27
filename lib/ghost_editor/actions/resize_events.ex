@@ -1,5 +1,6 @@
 defmodule GhostEditor.Actions.Resize.ResizeEvents do
   use GhostEditor.Constants.Keys
+  alias GhostEditor.Model
 
   # def event(:resize_mode, %{model: model}) do
   #   %{
@@ -8,7 +9,7 @@ defmodule GhostEditor.Actions.Resize.ResizeEvents do
   #   }
   # end
 
-  def event(:resize_plus_x, %{model: model}) do
+  def event(:resize_plus_x, model = %Model{}) do
     %{displays: displays} = model
 
     %{
@@ -22,7 +23,7 @@ defmodule GhostEditor.Actions.Resize.ResizeEvents do
     }
   end
 
-  def event(:resize_minus_x, %{model: model}) do
+  def event(:resize_minus_x, model = %Model{}) do
     %{displays: displays} = model
 
     %{

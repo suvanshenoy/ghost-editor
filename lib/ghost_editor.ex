@@ -1,10 +1,11 @@
 defmodule GhostEditor do
   @behaviour Ratatouille.App
   alias GhostEditor.Layout
+  alias GhostEditor.Model
 
   @impl true
   def init(%{window: window}) do
-    model = %{
+    model = %Model{
       window: window,
       text: "",
       text_cursor: %{text_cursor_x: 0, text_cursor_y: 0},
@@ -22,12 +23,12 @@ defmodule GhostEditor do
   end
 
   @impl true
-  def update(model, message) do
+  def update(model = %Model{}, message) do
     Layout.update(model, message)
   end
 
   @impl true
-  def render(model) do
+  def render(model = %Model{}) do
     Layout.render(model)
   end
 end

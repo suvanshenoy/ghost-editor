@@ -1,6 +1,7 @@
 defmodule GhostEditor.Actions.Traverse.MenuTraverse do
   use GhostEditor.Constants.Keys
   alias GhostEditor.Actions.Traverse.MenuTraverseEvents
+  alias GhostEditor.Model
 
   def init(model) do
     model
@@ -19,13 +20,13 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverse do
           }
         }
 
-  def update(model, message) do
+  def update(model = %Model{}, message) do
     case message do
       {:event, %{ch: @move_down}} ->
-        MenuTraverseEvents.event(:traverse_down, %{model: model})
+        MenuTraverseEvents.event(:traverse_down, model)
 
       {:event, %{ch: @move_up}} ->
-        MenuTraverseEvents.event(:traverse_up, %{model: model})
+        MenuTraverseEvents.event(:traverse_up, model)
 
       _ ->
         model

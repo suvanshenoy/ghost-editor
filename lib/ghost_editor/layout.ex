@@ -8,9 +8,10 @@ defmodule GhostEditor.Layout do
   alias GhostEditor.UI.Screen
   alias GhostEditor.Actions.Display
   alias GhostEditor.Actions.Typing
+  alias GhostEditor.Model
   # alias GhostEditor.UI.Screen.TerminalScreen
 
-  def update(model, message) do
+  def update(model = %Model{}, message) do
     case message do
       {:event, %ExTermbox.Event{type: 1, mod: 0, key: 23, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
         Switch.update(model, message)
@@ -41,7 +42,16 @@ defmodule GhostEditor.Layout do
     end
   end
 
-  def render(model) do
+  def render(model = %Model{}) do
+    if not File.exists?(@cache_dir) or not File.exists?(@focussed_file_path) or
+         not File.exists?(@current_file_path) do
+      File.cd!(Path.expand("~"))
+      File.mkdir!(@cache_dir)
+      File.open!(@focussed_file_path, [:write])
+      File.open!(@current_file_path, [:write])
+    end
+
+    File.write!(@current_file_path, File.cwd!())
     current_file_path = File.read!(@current_file_path)
 
     files =
@@ -51,15 +61,15 @@ defmodule GhostEditor.Layout do
       end
 
     case model do
-      %{mode: "traverse", key: "k", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
+      %Model{mode: "traverse", key: "k", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
         Screen.render(
-          %{
+          %Model{
             model
             | displays: %{
                 screen: %{size: 10}
               }
           },
-          FileMenu.render(%{
+          FileMenu.render(%Model{
             model
             | displays: %{
                 menu: %{
@@ -71,15 +81,15 @@ defmodule GhostEditor.Layout do
           })
         )
 
-      %{mode: "traverse", key: "j", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
+      %Model{mode: "traverse", key: "j", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
         Screen.render(
-          %{
+          %Model{
             model
             | displays: %{
                 screen: %{size: 10}
               }
           },
-          FileMenu.render(%{
+          FileMenu.render(%Model{
             model
             | displays: %{
                 menu: %{
@@ -91,9 +101,9 @@ defmodule GhostEditor.Layout do
           })
         )
 
-      %{mode: "display", key: "ctrl_d", displays: %{screen: %{show: 1}, menu: %{show: 0}}} ->
+      %Model{mode: "display", key: "ctrl_d", displays: %{screen: %{show: 1}, menu: %{show: 0}}} ->
         Screen.render(
-          %{
+          %Model{
             model
             | displays: %{
                 screen: %{size: 12.85}
@@ -102,15 +112,15 @@ defmodule GhostEditor.Layout do
           nil
         )
 
-      %{mode: "resize", displays: %{screen: %{size: size}, menu: %{size: size}}} ->
+      %Model{mode: "resize", displays: %{screen: %{size: size}, menu: %{size: size}}} ->
         Screen.render(
-          %{
+          %Model{
             model
             | displays: %{
                 screen: %{size: 10 + size}
               }
           },
-          FileMenu.render(%{
+          FileMenu.render(%Model{
             model
             | displays: %{
                 menu: %{size: 2 + size, files: files}
@@ -120,13 +130,13 @@ defmodule GhostEditor.Layout do
 
       _ ->
         Screen.render(
-          %{
+          %Model{
             model
             | displays: %{
                 screen: %{size: 10}
               }
           },
-          FileMenu.render(%{
+          FileMenu.render(%Model{
             model
             | displays: %{menu: %{size: 2, files: files}, screen: %{size: 10}}
           })

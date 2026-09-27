@@ -1,4 +1,6 @@
 defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
+  alias GhostEditor.Model
+
   @spec event(:traverse_down | :traverse_up, %{model: any()}) :: %{
           displays: %{
             menu: %{
@@ -9,7 +11,7 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
           }
         }
 
-  def event(:traverse_down, %{model: model}) do
+  def event(:traverse_down, model = %Model{}) do
     %{displays: displays} = model
 
     up = displays.menu.traverse.up + 1
@@ -28,7 +30,7 @@ defmodule GhostEditor.Actions.Traverse.MenuTraverseEvents do
     }
   end
 
-  def event(:traverse_up, %{model: model}) do
+  def event(:traverse_up, model = %Model{}) do
     %{displays: displays} = model
 
     up = displays.menu.traverse.up - 1

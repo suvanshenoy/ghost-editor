@@ -2,6 +2,7 @@ defmodule GhostEditor.UI.CursorBar do
   import Ratatouille.View
   use GhostEditor.Constants.Colors
   alias GhostEditor.AdjustSize
+  alias GhostEditor.Model
 
   @spec render(%{
           cursor_position: %{cursor_position_x: number(), cursor_position_y: number()},
@@ -10,7 +11,7 @@ defmodule GhostEditor.UI.CursorBar do
         }) ::
           any()
 
-  def render(model) do
+  def render(model = %Model{}) do
     %{
       cursor_position: %{cursor_position_x: posX, cursor_position_y: posY},
       key: key,
@@ -18,7 +19,7 @@ defmodule GhostEditor.UI.CursorBar do
     } =
       model
 
-    size = AdjustSize.adjust(:cursor_bar, %{model: model})
+    size = AdjustSize.adjust(:cursor_bar, model)
 
     cursor_bar =
       bar do

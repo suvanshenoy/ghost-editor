@@ -4,6 +4,7 @@ defmodule GhostEditor.UI.Screen do
   use GhostEditor.Constants.Paths
   alias GhostEditor.AdjustSize
   alias GhostEditor.UI.CursorBar
+  alias GhostEditor.Model
   import GhostEditor.Utils.FunctionName, only: [name: 0]
 
   @spec render(
@@ -20,7 +21,7 @@ defmodule GhostEditor.UI.Screen do
           any()
         ) :: any()
 
-  def render(model, menu) do
+  def render(model = %Model{}, menu) do
     %{
       window: window,
       text: text
@@ -29,7 +30,7 @@ defmodule GhostEditor.UI.Screen do
 
     height = window.height - 2
 
-    size = AdjustSize.adjust(:screen, %{model: model})
+    size = AdjustSize.adjust(:screen, model)
 
     data = File.read!(@focussed_file_path)
 
@@ -46,7 +47,9 @@ defmodule GhostEditor.UI.Screen do
                 files
             end
 
-          view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
+          view(
+            bottom_bar: CursorBar.render(%Model{model | displays: %{cursor_bar: %{size: 2}}})
+          ) do
             overlay(padding: 0) do
               row do
                 menu
@@ -65,7 +68,36 @@ defmodule GhostEditor.UI.Screen do
           end
 
         dump_file?(data) ->
-          view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
+          view(
+            bottom_bar: CursorBar.render(%Model{model | displays: %{cursor_bar: %{size: 2}}})
+          ) do
+            overlay(padding: 0) do
+              row do
+                menu
+
+                column(size: size) do
+                  panel(
+                    height: height + 2,
+                    border: %{color: @default_border_color},
+                    padding: 0
+                  ) do
+                    label(
+                      content: text <> "|" <> "#{data}",
+                      attributes: [:bold],
+                      color: @default_text_color
+                    )
+                  end
+                end
+              end
+            end
+          end
+
+        binary_file?(data) ->
+          data = for <<bit::1 <- data>>, do: bit |> to_string()
+
+          view(
+            bottom_bar: CursorBar.render(%Model{model | displays: %{cursor_bar: %{size: 2}}})
+          ) do
             overlay(padding: 0) do
               row do
                 menu
@@ -90,7 +122,9 @@ defmodule GhostEditor.UI.Screen do
         true ->
           data = File.read!(data)
 
-          view(bottom_bar: CursorBar.render(%{model | displays: %{cursor_bar: %{size: 2}}})) do
+          view(
+            bottom_bar: CursorBar.render(%Model{model | displays: %{cursor_bar: %{size: 2}}})
+          ) do
             overlay(padding: 0) do
               row do
                 menu
@@ -144,6 +178,9 @@ defmodule GhostEditor.UI.Screen do
   end
 
   defp dump_file?(file_name), do: Path.extname(file_name) == ".dump"
+
+  defp binary_file?(file_name),
+    do: Path.extname(file_name) == ".jpeg" || Path.extname(file_name) == ".png"
 
   defp directory_tree(files) do
     dirs =
