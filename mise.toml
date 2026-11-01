@@ -2,5 +2,5 @@
 "aqua:go-task/task" = "latest"
 dprint = "latest"
 elixir = "latest"
-erlang = "28"
+erlang = "latest"
 zig = "0.15.2"

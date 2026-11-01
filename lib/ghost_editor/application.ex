@@ -5,14 +5,20 @@ defmodule GhostEditor.Application do
 
   @impl true
   def start(_type, _args) do
-    runtime_opts = [
-      app: GhostEditor,
-      shutdown: {:application, :ghosteditor}
-    ]
+    children =
+      if Burrito.Util.running_standalone?() do
+        [
+          GhostEditor.CLI
+        ]
+      else
+        [
+          GhostEditor.TUI
+        ]
+      end
 
-    children = [
-      {Ratatouille.Runtime.Supervisor, runtime: runtime_opts}
-    ]
+    # children = [
+    #   GhostEditor.CLI
+    # ]
 
     opts = [strategy: :one_for_one, name: GhostEditor.Supervisor]
     Supervisor.start_link(children, opts)
