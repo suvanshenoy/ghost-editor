@@ -1,146 +1,72 @@
 defmodule GhostEditor.Layout do
-  use GhostEditor.Constants.Colors
-  use GhostEditor.Constants.Paths
-  alias GhostEditor.Actions.Resize
-  alias GhostEditor.Actions.Switch
-  alias GhostEditor.Actions.Traverse.MenuTraverse
-  alias GhostEditor.UI.FileMenu
-  alias GhostEditor.UI.Screen
-  alias GhostEditor.Actions.Display
-  alias GhostEditor.Actions.Typing
   alias GhostEditor.Model
-  # alias GhostEditor.UI.Screen.TerminalScreen
+  alias ExRatatui.Frame
+  alias ExRatatui.Layout
+  alias ExRatatui.Layout.Rect
+  alias ExRatatui.Style
+  alias ExRatatui.Widgets.{Paragraph, Block}
 
-  def update(model = %Model{}, message) do
-    case message do
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 23, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Switch.update(model, message)
+  def render(state, frame) do
+    frame = %Frame{width: frame.width, height: frame.height}
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 0, ch: 106, w: 0, h: 0, x: 0, y: 0}} ->
-        MenuTraverse.update(model, message)
+    area = %Rect{x: 0, y: 0, width: frame.width, height: frame.height}
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 0, ch: 107, w: 0, h: 0, x: 0, y: 0}} ->
-        MenuTraverse.update(model, message)
+    [header_area, body_area, footer_area] =
+      Layout.split(area, :vertical, [{:length, 3}, {:min, 0}, {:length, 3}])
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 5, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Switch.update(model, message)
+    header = header_widget(state)
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 4, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Display.update(model, message)
+    body = body_widget(state)
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 13, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Display.update(model, message)
+    footer = footer_widget(state)
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 65514, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Resize.update(model, message)
-
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 65515, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Resize.update(model, message)
-
-      _ ->
-        Typing.update(model, message)
-    end
+    [
+      {header, header_area},
+      {body, body_area},
+      {footer, footer_area}
+    ]
   end
 
-  def render(model = %Model{}) do
-    if not File.exists?(@cache_dir) or not File.exists?(@focussed_file_path) or
-         not File.exists?(@current_file_path) do
-      File.cd!(Path.expand("~"))
-      File.mkdir!(@cache_dir)
-      File.open!(@focussed_file_path, [:write])
-      File.open!(@current_file_path, [:write])
-    end
+  defp header_widget(state) do
+    state = %Model{displays: state.displays}
 
-    File.write!(@current_file_path, File.cwd!())
-    current_file_path = File.read!(@current_file_path)
+    %Paragraph{
+      text: "foo text #{state.displays.screen}",
+      style: %Style{fg: :cyan, modifiers: [:bold]},
+      block: %Block{
+        title: "foo block",
+        borders: [:all],
+        border_type: :rounded,
+        border_style: %Style{fg: :cyan}
+      }
+    }
+  end
 
-    files =
-      cond do
-        File.dir?(current_file_path) -> File.ls!(current_file_path)
-        true -> [current_file_path]
-      end
+  defp body_widget(state) do
+    state = %Model{displays: state.displays}
 
-    case model do
-      %Model{mode: "traverse", key: "k", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{
-                menu: %{
-                  size: 2,
-                  files: files,
-                  traverse: %{up: up}
-                }
-              }
-          })
-        )
+    %Paragraph{
+      text: "#{state.displays.screen}",
+      style: %Style{fg: :white, modifiers: [:bold]},
+      block: %Block{
+        borders: [:all],
+        border_type: :rounded,
+        border_style: %Style{fg: :cyan}
+      }
+    }
+  end
 
-      %Model{mode: "traverse", key: "j", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{
-                menu: %{
-                  size: 2,
-                  files: files,
-                  traverse: %{up: up}
-                }
-              }
-          })
-        )
+  defp footer_widget(state) do
+    state = %Model{displays: state.displays}
 
-      %Model{mode: "display", key: "ctrl_d", displays: %{screen: %{show: 1}, menu: %{show: 0}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 12.85}
-              }
-          },
-          nil
-        )
-
-      %Model{mode: "resize", displays: %{screen: %{size: size}, menu: %{size: size}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10 + size}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{
-                menu: %{size: 2 + size, files: files}
-              }
-          })
-        )
-
-      _ ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{menu: %{size: 2, files: files}, screen: %{size: 10}}
-          })
-        )
-    end
+    %Paragraph{
+      text: "#{state.displays.screen}",
+      style: %Style{fg: :white, modifiers: [:bold]},
+      block: %Block{
+        borders: [:all],
+        border_type: :rounded,
+        border_style: %Style{fg: :cyan}
+      }
+    }
   end
 end

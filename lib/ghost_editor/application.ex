@@ -5,13 +5,8 @@ defmodule GhostEditor.Application do
 
   @impl true
   def start(_type, _args) do
-    runtime_opts = [
-      app: GhostEditor,
-      shutdown: {:application, :ghosteditor}
-    ]
-
     children = [
-      {Ratatouille.Runtime.Supervisor, runtime: runtime_opts}
+      GhostEditor.CLI
     ]
 
     opts = [strategy: :one_for_one, name: GhostEditor.Supervisor]
