@@ -3,7 +3,7 @@ defmodule GhostEditor.MixProject do
 
   def project do
     [
-      app: :ghosteditor,
+      app: :ghost_editor,
       version: "0.1.0",
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
@@ -14,8 +14,8 @@ defmodule GhostEditor.MixProject do
 
   def releases do
     [
-      ghosteditor: [
-        steps: [:assemble, &Burrito.wrap/1],
+      ghost_editor: [
+        steps: [:assemble, &ExRatatui.Burrito.verify_linux_nif/1, &Burrito.wrap/1],
         burrito: [
           targets: [
             # macos: [os: :darwin, cpu: :x86_64],
@@ -39,7 +39,7 @@ defmodule GhostEditor.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ratatouille, git: "https://github.com/ndreynolds/ratatouille.git"},
+      {:ex_ratatui, git: "https://github.com/mcass19/ex_ratatui.git"},
       {:burrito, git: "https://github.com/burrito-elixir/burrito.git"}
     ]
   end

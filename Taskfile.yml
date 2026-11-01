@@ -1,19 +1,24 @@
 version: "3"
 
+vars:
+  EXECUTABLE: ghost_editor
+
 tasks:
   compile:
     cmds:
-      - MIX_ENV=prod mix release --compile --archives-check --deps-check --force
-      - cp -rvf ./burrito_out/ghosteditor_linux ./burrito_out/ghost-editor
-      - sudo cp -rvf ./burrito_out/ghost-editor /usr/local/bin/ghost-editor
+      - mix deps.get
+      - mix deps.compile
+      - TARGET_ABI=musl BURRITO_TARGET=linux MIX_ENV=prod mix release --overwrite
+      - cp -rvf ./burrito_out/{{.EXECUTABLE}}_linux ./burrito_out/{{.EXECUTABLE | replace "_" "-"}}
+      - sudo cp -rvf ./burrito_out/{{.EXECUTABLE | replace "_" "-"}} /usr/local/bin
     sources:
       - lib/**/*
     generates:
-      - ./burrito_out/ghosteditor_linux
-      - ./burrito_out/ghost-editor
+      - ./burrito_out/{{.EXECUTABLE}}_linux
+      - ./burrito_out/{{.EXECUTABLE | replace "_" "-"}}
     status:
-      - test -f burrito_out/ghosteditor_linux
-      - test -f burrito_out/ghost-editor
+      - test -f burrito_out/{{.EXECUTABLE}}_linux
+      - test -f burrito_out/{{.EXECUTABLE | replace "_" "-"}}
 
   compile:cleanup:
     cmds:
@@ -23,7 +28,7 @@ tasks:
   compile:run:
     cmds:
       - task: compile
-      - sudo ghost-editor
+      - sudo {{.EXECUTABLE | replace "_" "-"}}
 
   cleanup:
     cmds:

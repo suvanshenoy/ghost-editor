@@ -1,146 +1,49 @@
 defmodule GhostEditor.Layout do
-  use GhostEditor.Constants.Colors
-  use GhostEditor.Constants.Paths
-  alias GhostEditor.Actions.Resize
-  alias GhostEditor.Actions.Switch
-  alias GhostEditor.Actions.Traverse.MenuTraverse
-  alias GhostEditor.UI.FileMenu
-  alias GhostEditor.UI.Screen
-  alias GhostEditor.Actions.Display
-  alias GhostEditor.Actions.Typing
   alias GhostEditor.Model
-  # alias GhostEditor.UI.Screen.TerminalScreen
+  alias ExRatatui.Frame
+  alias ExRatatui.Layout
+  alias ExRatatui.Layout.Rect
+  alias ExRatatui.Style
+  alias ExRatatui.Widgets.{Paragraph, Block, Textarea}
 
-  def update(model = %Model{}, message) do
-    case message do
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 23, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Switch.update(model, message)
+  def render(state, frame) do
+    frame = %Frame{width: frame.width, height: frame.height}
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 0, ch: 106, w: 0, h: 0, x: 0, y: 0}} ->
-        MenuTraverse.update(model, message)
+    area = %Rect{x: 0, y: 0, width: frame.width, height: frame.height}
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 0, ch: 107, w: 0, h: 0, x: 0, y: 0}} ->
-        MenuTraverse.update(model, message)
+    [menu_area, screen_area] =
+      Layout.split(area, :horizontal, [{:length, 20}, {:min, 0}])
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 5, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Switch.update(model, message)
+    menu = menu_widget(state)
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 4, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Display.update(model, message)
+    screen = screen_widget(state)
 
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 13, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Display.update(model, message)
-
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 65514, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Resize.update(model, message)
-
-      {:event, %ExTermbox.Event{type: 1, mod: 0, key: 65515, ch: 0, w: 0, h: 0, x: 0, y: 0}} ->
-        Resize.update(model, message)
-
-      _ ->
-        Typing.update(model, message)
-    end
+    [{menu, menu_area}, {screen, screen_area}]
   end
 
-  def render(model = %Model{}) do
-    if not File.exists?(@cache_dir) or not File.exists?(@focussed_file_path) or
-         not File.exists?(@current_file_path) do
-      File.cd!(Path.expand("~"))
-      File.mkdir!(@cache_dir)
-      File.open!(@focussed_file_path, [:write])
-      File.open!(@current_file_path, [:write])
-    end
+  defp menu_widget(_state) do
+    %Paragraph{
+      style: %Style{fg: :magenta, modifiers: [:bold]},
+      block: %Block{
+        borders: [:all],
+        border_type: :rounded,
+        border_style: %Style{fg: :magenta}
+      }
+    }
+  end
 
-    File.write!(@current_file_path, File.cwd!())
-    current_file_path = File.read!(@current_file_path)
+  defp screen_widget(state) do
+    state = %Model{displays: state.displays, textarea: state.textarea}
 
-    files =
-      cond do
-        File.dir?(current_file_path) -> File.ls!(current_file_path)
-        true -> [current_file_path]
-      end
-
-    case model do
-      %Model{mode: "traverse", key: "k", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{
-                menu: %{
-                  size: 2,
-                  files: files,
-                  traverse: %{up: up}
-                }
-              }
-          })
-        )
-
-      %Model{mode: "traverse", key: "j", displays: %{menu: %{focus: 1, traverse: %{up: up}}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{
-                menu: %{
-                  size: 2,
-                  files: files,
-                  traverse: %{up: up}
-                }
-              }
-          })
-        )
-
-      %Model{mode: "display", key: "ctrl_d", displays: %{screen: %{show: 1}, menu: %{show: 0}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 12.85}
-              }
-          },
-          nil
-        )
-
-      %Model{mode: "resize", displays: %{screen: %{size: size}, menu: %{size: size}}} ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10 + size}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{
-                menu: %{size: 2 + size, files: files}
-              }
-          })
-        )
-
-      _ ->
-        Screen.render(
-          %Model{
-            model
-            | displays: %{
-                screen: %{size: 10}
-              }
-          },
-          FileMenu.render(%Model{
-            model
-            | displays: %{menu: %{size: 2, files: files}, screen: %{size: 10}}
-          })
-        )
-    end
+    %Textarea{
+      state: state.textarea,
+      style: %Style{fg: :magenta, modifiers: [:bold]},
+      cursor_style: %Style{bg: :white, fg: :black},
+      block: %Block{
+        borders: [:all],
+        border_type: :rounded,
+        border_style: %Style{fg: :magenta}
+      }
+    }
   end
 end
